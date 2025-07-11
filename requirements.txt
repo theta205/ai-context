@@ -1,0 +1,8 @@
+youtube-transcript-api==0.6.1
+pytube==15.0.0
+sentence-transformers==2.2.2
+numpy==1.24.3
+python-dotenv==1.0.0
+google-api-python-client==2.104.0
+google-auth-oauthlib==1.1.0
+google-auth-httplib2==0.1.1
