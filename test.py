@@ -28,15 +28,7 @@ def main():
         # Save results to a file
         filename = save_results_to_file(results)
         print(f"\nFound {len(results)} results. Saved to {filename}")
-        
-        # Print first result
-        first_result = results[0]
-        print("\nFirst result:")
-        print(f"Title: {first_result.title}")
-        print(f"Author: u/{first_result.author}")
-        print(f"Subreddit: r/{first_result.subreddit}")
-        print(f"URL: {first_result.url}")
-        
+    
     except Exception as e:
         print(f"An error occurred: {e}")
 

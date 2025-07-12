@@ -83,78 +83,58 @@ class RedditSearcher:
             user_agent=self.user_agent
         )
     
-    def _extract_post_id(self, url: str) -> Optional[str]:
-        """Extract the post ID from a Reddit URL.
-        
-        Args:
-            url: The Reddit post URL
-            
-        Returns:
-            The post ID if found, None otherwise
-        """
-        try:
-            # Handle different Reddit URL formats
-            if 'comments/' in url:
-                match = re.search(r'comments/([a-z0-9]+)', url)
-                return match.group(1) if match else None
-            
-            # Handle short URLs and other formats
-            path_parts = urlparse(url).path.rstrip('/').split('/')
-            return path_parts[-1] if path_parts and path_parts[-1] else None
-            
-        except Exception as e:
-            logger.error(f"Error extracting post ID from URL {url}: {e}")
-            return None
-    
-    def _get_post_data(self, post_id: str) -> Optional[RedditPost]:
-        """Fetch post data and comments using PRAW.
-        
-        Args:
-            post_id: The Reddit post ID
-            
-        Returns:
-            RedditPost object if successful, None otherwise
-        """
+    def __extract_post_id(self, url: str) -> Optional[str]:
+        """Extract Reddit post ID from URL."""
+        patterns = [
+            r"reddit\.com/r/\w+/comments/(\w+)",
+            r"redd\.it/(\w+)"
+        ]
+        for pattern in patterns:
+            match = re.search(pattern, url)
+            if match:
+                return match.group(1)
+        return None
+
+    def __get_post_data(self, post_id: str) -> Optional[RedditPost]:
+        """Fetch and process data for a single Reddit post."""
         try:
             submission = self.reddit.submission(id=post_id)
+            submission.comments.replace_more(limit=0)  # Load top-level comments only
             
-            # Get top 5 comments
-            submission.comments.replace_more(limit=0)
-            comments = [
-                RedditComment(
-                    author=str(comment.author) if comment.author else '[deleted]',
-                    score=comment.score,
-                    body=comment.body,
-                    created_utc=datetime.utcfromtimestamp(comment.created_utc).isoformat()
-                )
-                for comment in submission.comments[:5]
-            ]
+            # Get top 5 comments by score
+            comments = sorted(
+                [
+                    RedditComment(
+                        author=comment.author.name if comment.author else "[deleted]",
+                        score=comment.score,
+                        body=comment.body,
+                        created_utc=datetime.utcfromtimestamp(comment.created_utc).isoformat()
+                    )
+                    for comment in submission.comments
+                    if not comment.stickied
+                ],
+                key=lambda x: x.score,
+                reverse=True
+            )[:5]
             
             return RedditPost(
                 title=submission.title,
-                author=str(submission.author) if submission.author else '[deleted]',
+                author=submission.author.name if submission.author else "[deleted]",
                 subreddit=submission.subreddit.display_name,
                 score=submission.score,
                 num_comments=submission.num_comments,
+                created_utc=datetime.utcfromtimestamp(submission.created_utc).isoformat(),
                 url=f"https://reddit.com{submission.permalink}",
                 selftext=submission.selftext,
-                created_utc=datetime.utcfromtimestamp(submission.created_utc).isoformat(),
                 comments=comments
             )
             
         except Exception as e:
-            logger.error(f"Error fetching Reddit data for post {post_id}: {e}")
+            logger.error(f"Error fetching post {post_id}: {e}")
             return None
-    
-    def _format_slim_json(self, post: RedditPost) -> dict:
-        """Format a RedditPost into a slim JSON format.
-        
-        Args:
-            post: The RedditPost to format
-            
-        Returns:
-            dict: A dictionary with title, subreddit, url, selftext, and comments
-        """
+
+    def __format_slim_json(self, post: RedditPost) -> dict:
+        """Format a RedditPost into a minimal JSON format."""
         return {
             "title": post.title,
             "subreddit": post.subreddit,
@@ -166,15 +146,8 @@ class RedditSearcher:
             ]
         }
 
-    def _format_slim_xml(self, post: RedditPost) -> str:
-        """Format a RedditPost into a slim XML format optimized for LLM processing.
-        
-        Args:
-            post: The RedditPost to format
-            
-        Returns:
-            str: XML string with simplified structure and unescaped characters
-        """
+    def __format_slim_xml(self, post: RedditPost) -> str:
+        """Format a RedditPost into a slim XML format optimized for LLM processing."""
         # Unescape special characters in text content
         from html import unescape
         
@@ -244,16 +217,16 @@ class RedditSearcher:
                     # Clean the URL and extract post ID
                     parsed = urlparse(url)
                     clean_url = f"{parsed.scheme}://{parsed.netloc}{parsed.path}"
-                    post_id = self._extract_post_id(clean_url)
+                    post_id = self.__extract_post_id(clean_url)
                     
                     if post_id:
                         # Fetch post data
-                        post_data = self._get_post_data(post_id)
+                        post_data = self.__get_post_data(post_id)
                         if post_data:
                             if format == 'slim_json':
-                                results.append(self._format_slim_json(post_data))
+                                results.append(self.__format_slim_json(post_data))
                             elif format == 'slim_xml':
-                                results.append(self._format_slim_xml(post_data))
+                                results.append(self.__format_slim_xml(post_data))
                             else:
                                 results.append(post_data)
                             if len(results) >= num_results:
@@ -299,72 +272,3 @@ def save_results_to_file(posts: List[Union[RedditPost, Dict, str]], filename: st
             f.write(posts[0])
     
     return filename
-
-def main():
-    """Command-line interface for the Reddit search tool."""
-    try:
-        # Check if credentials are set
-        if not all([os.getenv('REDDIT_CLIENT_ID'), os.getenv('REDDIT_CLIENT_SECRET')]):
-            print("Error: Reddit API credentials not found.")
-            print("Please create a .env file with the following variables:")
-            print("REDDIT_CLIENT_ID=your_client_id_here")
-            print("REDDIT_CLIENT_SECRET=your_client_secret_here")
-            print("REDDIT_USER_AGENT=your_user_agent_here (optional)")
-            return
-        
-        searcher = RedditSearcher()
-        
-        while True:
-            query = input("\nEnter your search query (or 'quit' to exit): ").strip()
-            if query.lower() == 'quit':
-                break
-                
-            if not query:
-                print("Please enter a search query.")
-                continue
-                
-            print(f"\nSearching for: {query}")
-            results = searcher.search(query)
-            
-            if not results:
-                print("No results found.")
-                continue
-                
-            # Save results to file
-            filename = save_results_to_file(results)
-            print(f"\nFound {len(results)} results. Saved to {filename}")
-            
-            # Display first result as a sample
-            first_result = results[0]
-            if isinstance(first_result, str):
-                print("\nSample of the first result:")
-                print(first_result)
-            else:
-                print("\nSample of the first result:")
-                print(f"\nTitle: {first_result.title}")
-                print(f"Author: u/{first_result.author}")
-                print(f"Subreddit: r/{first_result.subreddit}")
-                print(f"Score: {first_result.score} points")
-                print(f"Comments: {first_result.num_comments}")
-                print(f"Posted: {first_result.created_utc}")
-                print(f"URL: {first_result.url}")
-                
-                if first_result.selftext:
-                    print("\nPost Content:")
-                    print(first_result.selftext[:500] + 
-                         ("..." if len(first_result.selftext) > 500 else ""))
-                
-                if first_result.comments:
-                    print(f"\nTop {len(first_result.comments)} comments:")
-                    for i, comment in enumerate(first_result.comments, 1):
-                        print(f"\n{i}. u/{comment.author} ({comment.score} points)")
-                        print(comment.body[:200] + 
-                             ("..." if len(comment.body) > 200 else ""))
-    
-    except KeyboardInterrupt:
-        print("\nExiting...")
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
-if __name__ == "__main__":
-    main()
