@@ -43,9 +43,81 @@ A Python tool that searches Reddit posts and retrieves full content including to
 
 - Searches Reddit posts using Google search
 - Retrieves full post content including text and metadata
-- Fetches top 5 comments for each post
+- Fetches top 5 comments by score for each post
+- Preserves comment references and formatting
 - Saves results to a JSON file with timestamp
 - Displays a summary of the first result in the console
+
+### Output Formats
+
+The Reddit search supports three output formats:
+
+1. **Raw (default)**: Full RedditPost objects with all available data
+2. **Slim JSON**: Minimal JSON format with essential fields
+3. **Slim XML**: XML version of the slim format
+
+#### Slim JSON Format Example
+```json
+{
+  "title": "Post Title",
+  "subreddit": "subreddit_name",
+  "url": "https://reddit.com/...",
+  "selftext": "Post content...",
+  "comments": [
+    {"body": "First comment"},
+    {"body": "Second comment"}
+  ]
+}
+```
+
+#### Slim XML Format Example
+```xml
+<?xml version="1.0" ?>
+<post>
+  <title>Post Title</title>
+  <subreddit>subreddit_name</subreddit>
+  <url>https://reddit.com/...</url>
+  <selftext>Post content...</selftext>
+  <comments>
+    <comment>
+      <body>First comment</body>
+    </comment>
+    <comment>
+      <body>Second comment</body>
+    </comment>
+  </comments>
+</post>
+```
+
+### Comment References
+
+When a comment references another comment or the original post, it's included in the following format:
+
+1. **Quote Format**: 
+   ```
+   > This is the referenced text
+   
+   This is the comment's response
+   ```
+
+2. **Examples**:
+   - When replying to the original post:
+     ```
+     > Original post text...
+     
+     This is a response to the post
+     ```
+   - When replying to another comment:
+     ```
+     > Parent comment text...
+     
+     This is a reply to that comment
+     ```
+
+3. **Formatting**:
+   - Quoted text is prefixed with `>`
+   - Line breaks are preserved
+   - Markdown formatting (like `*italics*` or `**bold**`) is included as-is
 
 ### Additional Setup
 
