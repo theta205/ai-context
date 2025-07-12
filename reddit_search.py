@@ -1,9 +1,11 @@
 import os
+import json
+import praw
+import re
 from typing import List, Dict, Any, Optional
-from googlesearch import search
 from urllib.parse import urlparse
-import requests
-from bs4 import BeautifulSoup
+from googlesearch import search
+from datetime import datetime
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -11,37 +13,77 @@ load_dotenv()
 
 class RedditSearcher:
     def __init__(self):
-        """Initialize the Reddit searcher."""
-        self.headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-        }
+        """Initialize the Reddit searcher with PRAW and Google search."""
+        # Initialize PRAW with environment variables
+        self.reddit = praw.Reddit(
+            client_id=os.getenv('REDDIT_CLIENT_ID'),
+            client_secret=os.getenv('REDDIT_CLIENT_SECRET'),
+            user_agent=os.getenv('REDDIT_USER_AGENT', 'python:ai-context:v1.0 (by /u/yourusername)')
+        )
     
-    def _get_reddit_title(self, url: str) -> str:
-        """Extract the title from a Reddit URL."""
+    def _extract_post_id(self, url: str) -> Optional[str]:
+        """Extract the post ID from a Reddit URL."""
         try:
-            # Parse the URL
-            parsed = urlparse(url)
-            # Get the last part of the path
-            path_parts = parsed.path.rstrip('/').split('/')
-            if path_parts and path_parts[-1]:
-                # Replace underscores with spaces and capitalize first letters
-                title = path_parts[-1].replace('_', ' ').title()
-                return title
-            return "[Title not found]"
+            # Handle different Reddit URL formats
+            if 'comments/' in url:
+                # Format: https://www.reddit.com/r/subreddit/comments/post_id/title/
+                match = re.search(r'comments/([a-z0-9]+)', url)
+                if match:
+                    return match.group(1)
+            else:
+                # Format: https://www.reddit.com/r/subreddit/.../post_id/
+                path_parts = urlparse(url).path.rstrip('/').split('/')
+                if path_parts and path_parts[-1]:
+                    return path_parts[-1]
+            return None
         except Exception as e:
-            print(f"Error parsing URL: {str(e)}")
-            return "[Title not found]"
+            print(f"Error extracting post ID: {str(e)}")
+            return None
     
-    def search_reddit_via_google(self, query: str, num_results: int = 5) -> List[Dict[str, str]]:
+    def _get_reddit_data(self, post_id: str) -> Optional[Dict[str, Any]]:
+        """Fetch post data and comments using PRAW."""
+        try:
+            submission = self.reddit.submission(id=post_id)
+            
+            # Get post data
+            post_data = {
+                'title': submission.title,
+                'author': str(submission.author) if submission.author else '[deleted]',
+                'subreddit': submission.subreddit.display_name,
+                'score': submission.score,
+                'num_comments': submission.num_comments,
+                'url': f"https://reddit.com{submission.permalink}",
+                'selftext': submission.selftext,
+                'created_utc': datetime.utcfromtimestamp(submission.created_utc).isoformat(),
+                'comments': []
+            }
+            
+            # Get top 5 comments
+            submission.comments.replace_more(limit=0)  # Remove MoreComments objects
+            for i, comment in enumerate(submission.comments[:5]):
+                post_data['comments'].append({
+                    'author': str(comment.author) if comment.author else '[deleted]',
+                    'score': comment.score,
+                    'body': comment.body,
+                    'created_utc': datetime.utcfromtimestamp(comment.created_utc).isoformat()
+                })
+            
+            return post_data
+            
+        except Exception as e:
+            print(f"Error fetching Reddit data: {str(e)}")
+            return None
+    
+    def search_reddit_via_google(self, query: str, num_results: int = 5) -> List[Dict[str, Any]]:
         """
-        Search for Reddit posts using Google and return the top results.
+        Search for Reddit posts using Google and fetch full content using PRAW.
         
         Args:
             query: The search query string
             num_results: Number of results to return (default: 5)
             
         Returns:
-            List of dictionaries containing 'title' and 'url' of Reddit posts
+            List of dictionaries containing post details and comments
         """
         try:
             # Add site:reddit.com to the query to only get Reddit results
@@ -55,7 +97,6 @@ class RedditSearcher:
                 sleep_interval=2  # Be nice to Google's servers
             )
             
-            # Filter and process results
             results = []
             for url in search_results:
                 # Ensure it's a Reddit URL and not an ad or tracking URL
@@ -64,25 +105,32 @@ class RedditSearcher:
                     parsed = urlparse(url)
                     clean_url = f"{parsed.scheme}://{parsed.netloc}{parsed.path}"
                     
-                    # Get the title from the page
-                    title = self._get_reddit_title(clean_url)
-                    
-                    results.append({
-                        'title': title,
-                        'url': clean_url
-                    })
-                    
-                    if len(results) >= num_results:
-                        break
+                    # Get post ID and fetch data using PRAW
+                    post_id = self._extract_post_id(clean_url)
+                    if post_id:
+                        post_data = self._get_reddit_data(post_id)
+                        if post_data:
+                            results.append(post_data)
+                            if len(results) >= num_results:
+                                break
             
             return results
             
         except Exception as e:
-            print(f"Error searching Google for Reddit posts: {str(e)}")
+            print(f"Error searching for Reddit posts: {str(e)}")
             return []
 
 def main():
     try:
+        # Check if credentials are set
+        if not all([os.getenv('REDDIT_CLIENT_ID'), os.getenv('REDDIT_CLIENT_SECRET')]):
+            print("Error: Reddit API credentials not found.")
+            print("Please create a .env file with the following variables:")
+            print("REDDIT_CLIENT_ID=your_client_id_here")
+            print("REDDIT_CLIENT_SECRET=your_client_secret_here")
+            print("REDDIT_USER_AGENT=your_user_agent_here (optional)")
+            return
+        
         searcher = RedditSearcher()
         
         while True:
@@ -96,17 +144,45 @@ def main():
             
             # Perform the search
             print(f"\nSearching for Reddit posts about: {query}")
-            results = searcher.search_reddit_via_google(query, num_results=5)
+            results = searcher.search_reddit_via_google(query, num_results=2)  # Reduced to 2 for demo
             
             # Display results
             if not results:
                 print("No Reddit posts found.")
                 continue
             
-            print(f"\nTop {len(results)} Reddit posts about '{query}':")
-            for i, result in enumerate(results, 1):
-                print(f"\n{i}. {result['title']}")
-                print(f"   {result['url']}")
+            print(f"\nFound {len(results)} Reddit posts about '{query}':\n")
+            
+            # Save results to a JSON file
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"reddit_search_{timestamp}.json"
+            
+            with open(filename, 'w', encoding='utf-8') as f:
+                json.dump(results, f, indent=2, ensure_ascii=False)
+            
+            print(f"Results have been saved to {filename}")
+            print("\nSample of the first result:")
+            
+            # Display first result as sample
+            if results:
+                first_result = results[0]
+                print(f"\nTitle: {first_result['title']}")
+                print(f"Author: u/{first_result['author']}")
+                print(f"Subreddit: r/{first_result['subreddit']}")
+                print(f"Score: {first_result['score']} points")
+                print(f"Comments: {first_result['num_comments']}")
+                print(f"Posted: {first_result['created_utc']}")
+                print(f"URL: {first_result['url']}")
+                
+                if first_result['selftext']:
+                    print("\nPost Content:")
+                    print(first_result['selftext'][:500] + ("..." if len(first_result['selftext']) > 500 else ""))
+                
+                if first_result['comments']:
+                    print(f"\nTop {len(first_result['comments'])} comments:")
+                    for i, comment in enumerate(first_result['comments'], 1):
+                        print(f"\n{i}. u/{comment['author']} ({comment['score']} points)")
+                        print(comment['body'][:200] + ("..." if len(comment['body']) > 200 else ""))
     
     except KeyboardInterrupt:
         print("\nExiting...")
