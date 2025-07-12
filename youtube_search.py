@@ -1,103 +1,159 @@
 import os
 import json
 import time
+import logging
+from typing import Dict, List, Optional, Any, Union
+from dataclasses import dataclass
+
 import requests
-from typing import List, Dict, Any, Optional
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled, NoTranscriptFound, VideoUnavailable
 from youtube_transcript_api.formatters import TextFormatter
 from dotenv import load_dotenv
 
-# Load environment variables
-load_dotenv()
+# Set up logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger('YouTubeSearcher')
+
+@dataclass
+class YouTubeVideo:
+    """Data class to store YouTube video information."""
+    video_id: str
+    title: str
+    url: str
+    channel: str
+    published_at: str
+    description: str
+    snippets: List[str]
+    has_transcript: bool
+    transcript_preview: Optional[str] = None
+    full_transcript: Optional[str] = None
 
 class YouTubeSearcher:
-    def __init__(self, api_key: str):
-        """Initialize the YouTube searcher with API key and proxy settings."""
-        # Get proxy from environment
-        self.proxy = os.getenv('HTTP_PROXY')
-        self.session = requests.Session()
+    """A class to search YouTube videos and retrieve their transcripts."""
+    
+    def __init__(self, api_key: str, proxy: Optional[str] = None, max_retries: int = 3):
+        """Initialize the YouTube searcher.
         
-        # Configure proxy if available
-        if self.proxy:
+        Args:
+            api_key: YouTube Data API v3 key
+            proxy: Optional HTTP/HTTPS proxy URL (e.g., 'http://user:pass@host:port')
+            max_retries: Maximum number of retries for failed requests
+        """
+        self.api_key = api_key
+        self.max_retries = max_retries
+        self.session = self._setup_session(proxy)
+        self.youtube = self._init_youtube_client()
+    
+    def _setup_session(self, proxy: Optional[str] = None) -> requests.Session:
+        """Set up a requests session with optional proxy."""
+        session = requests.Session()
+        
+        if proxy:
             try:
-                print(f"Using HTTP proxy: {self.proxy}")
-                
-                # Set up the session with proxy
-                self.session.proxies = {
-                    'http': self.proxy,
-                    'https': self.proxy
+                session.proxies = {
+                    'http': proxy,
+                    'https': proxy
                 }
-                
                 # Test the proxy connection
                 test_url = 'https://ipv4.webshare.io/'
-                response = self.session.get(test_url, timeout=10, verify=False)
+                response = session.get(test_url, timeout=10, verify=False)
                 if response.status_code == 200:
-                    print(f"Successfully connected to proxy. IP: {response.text.strip()}")
+                    logger.info(f"Successfully connected to proxy. IP: {response.text.strip()}")
                 else:
-                    print(f"Warning: Proxy connection test failed with status {response.status_code}")
-                
+                    logger.warning(f"Proxy connection test failed with status {response.status_code}")
             except Exception as e:
-                print(f"Error setting up proxy: {str(e)[:200]}...")
-                print("Continuing without proxy...")
+                logger.error(f"Error setting up proxy: {e}")
+                logger.info("Continuing without proxy...")
+                session.proxies = {}
         
-        # Initialize YouTube API client
-        self.youtube = build('youtube', 'v3',
-                           developerKey=api_key,
-                           cache_discovery=False,
-                           static_discovery=False)
+        return session
+    
+    def _init_youtube_client(self):
+        """Initialize the YouTube API client."""
+        return build('youtube', 'v3',
+                    developerKey=self.api_key,
+                    cache_discovery=False,
+                    static_discovery=False)
     
     def get_video_transcript(self, video_id: str) -> Optional[str]:
-        """Get transcript for a YouTube video using the proxy if available."""
-        try:
-            print(f"Fetching transcript for video {video_id}...")
+        """Get transcript for a YouTube video.
+        
+        Args:
+            video_id: YouTube video ID
             
-            # Add a small delay before each transcript request
-            time.sleep(0.15)
-            
-            # Try to get the transcript with proxy if available
-            proxies = getattr(self, 'session', {}).proxies if hasattr(self, 'session') else None
-            
-            # Get transcript with proxy
-            transcript_list = YouTubeTranscriptApi.list_transcripts(
-                video_id,
-                proxies=proxies
-            )
-            
-            # Try to get English transcript first, then any available
+        Returns:
+            Transcript text if available, None otherwise
+        """
+        for attempt in range(self.max_retries):
             try:
-                transcript = transcript_list.find_transcript(['en'])
-            except:
-                transcript = next(iter(transcript_list), None)
-            
-            if not transcript:
-                print(f"No transcript available for video {video_id}")
-                return None
+                time.sleep(0.15)  # Rate limiting
                 
-            # Format the transcript as plain text
-            formatter = TextFormatter()
-            transcript_text = formatter.format_transcript(transcript.fetch())
-            return transcript_text
-            
-        except Exception as e:
-            print(f"Error getting transcript for video {video_id}: {str(e)[:200]}...")
-            return None
+                proxies = getattr(self.session, 'proxies', None)
+                transcript_list = YouTubeTranscriptApi.list_transcripts(
+                    video_id,
+                    proxies=proxies
+                )
+                
+                # Try to get English transcript first, then any available
+                try:
+                    transcript = transcript_list.find_transcript(['en'])
+                except (NoTranscriptFound, VideoUnavailable):
+                    transcript = next(iter(transcript_list), None)
+                
+                if not transcript:
+                    logger.warning(f"No transcript available for video {video_id}")
+                    return None
+                
+                formatter = TextFormatter()
+                return formatter.format_transcript(transcript.fetch())
+                
+            except TranscriptsDisabled:
+                logger.debug(f"Transcripts are disabled for video {video_id}")
+                return None
+            except VideoUnavailable:
+                logger.warning(f"Video {video_id} is unavailable")
+                return None
+            except Exception as e:
+                if attempt == self.max_retries - 1:
+                    logger.error(f"Failed to get transcript after {self.max_retries} attempts: {e}")
+                    return None
+                logger.warning(f"Attempt {attempt + 1} failed, retrying...")
+                time.sleep(1)  # Backoff before retry
     
-    def search_videos(self, query: str, max_results: int = 3) -> List[Dict[str, Any]]:
-        """Search for videos and return their details with snippets and transcripts."""
+    def search_videos(self, query: str, max_results: int = 3, format: str = 'raw', include_full_transcript: bool = True) -> List[Union[YouTubeVideo, Dict, str]]:
+        """Search for YouTube videos.
+        
+        Args:
+            query: Search query string
+            max_results: Maximum number of results to return (1-50)
+            format: Output format - 'raw', 'slim_json', or 'slim_xml'
+            include_full_transcript: Whether to include full transcript in the results
+            
+        Returns:
+            List of YouTubeVideo objects or formatted results based on format parameter
+        """
+        if format not in ['raw', 'slim_json', 'slim_xml']:
+            raise ValueError("format must be 'raw', 'slim_json', or 'slim_xml")
+            
+        max_results = max(1, min(50, max_results))  # Clamp between 1 and 50
+        videos = []
+        
         try:
             # Search for videos
             search_response = self.youtube.search().list(
                 part="snippet",
                 q=query,
                 type="video",
-                maxResults=min(max_results, 10),
+                maxResults=max_results,
                 order="relevance"
             ).execute()
             
-            videos = []
-            for item in search_response.get('items', [])[:max_results]:
+            for item in search_response.get('items', []):
                 try:
                     video_id = item.get('id', {}).get('videoId')
                     snippet = item.get('snippet', {})
@@ -109,39 +165,176 @@ class YouTubeSearcher:
                     video_details = self.get_video_details(video_id)
                     
                     # Get transcript if available
-                    transcript = self.get_video_transcript(video_id)
+                    transcript = None
+                    transcript_preview = "[No transcript available]"
+                    has_transcript = False
+                    transcript_error = None
+                    
+                    try:
+                        logger.info(f"Checking for transcript for video: {snippet.get('title')} ({video_id})")
+                        
+                        # Try direct transcript fetch first
+                        try:
+                            proxies = getattr(self.session, 'proxies', None)
+                            logger.debug(f"Attempting to fetch transcript for video {video_id}")
+                            
+                            # First, list all available transcripts
+                            try:
+                                transcript_list = YouTubeTranscriptApi.list_transcripts(
+                                    video_id,
+                                    proxies=proxies
+                                )
+                                
+                                # Log available languages
+                                available_langs = [f"{t.language_code} ({t.language}){' [auto-generated]' if t.is_generated else ''}" 
+                                                for t in transcript_list]
+                                logger.info(f"Available transcripts for {video_id}: {', '.join(available_langs) if available_langs else 'None'}")
+                                
+                                if not list(transcript_list):
+                                    logger.warning(f"No transcripts available for video {video_id}")
+                                    transcript_error = "No transcripts available"
+                                else:
+                                    has_transcript = True
+                                    
+                                    # If we need full transcript or it's raw format, fetch it
+                                    if include_full_transcript or format == 'raw':
+                                        try:
+                                            # Try English first
+                                            transcript_obj = transcript_list.find_transcript(['en'])
+                                            transcript_segments = transcript_obj.fetch()
+                                            transcript = '\n'.join([t.text for t in transcript_segments])
+                                            transcript_preview = transcript[:500] + ('...' if len(transcript) > 500 else '')
+                                            logger.info(f"Successfully fetched English transcript for video {video_id}")
+                                        except Exception as e:
+                                            logger.warning(f"English transcript not available for video {video_id}, trying any available: {e}")
+                                            # Fallback to any available transcript
+                                            try:
+                                                transcript_obj = next(iter(transcript_list))
+                                                transcript_segments = transcript_obj.fetch()
+                                                transcript = '\n'.join([t.text for t in transcript_segments])
+                                                transcript_preview = transcript[:500] + ('...' if len(transcript) > 500 else '')
+                                                logger.info(f"Successfully fetched {transcript_obj.language_code} transcript for video {video_id}")
+                                            except Exception as inner_e:
+                                                transcript_error = f"Could not fetch any transcript: {str(inner_e)}"
+                                                logger.warning(f"{transcript_error} for video {video_id}")
+                                                transcript_preview = "[Transcript available but could not be fetched]"
+                                    else:
+                                        transcript_preview = "[Transcript available]"
+                                        
+                            except Exception as e:
+                                transcript_error = f"Error listing transcripts: {str(e)}"
+                                logger.warning(f"Could not list transcripts for video {video_id}: {e}")
+                                
+                        except Exception as e:
+                            transcript_error = f"Unexpected error: {str(e)}"
+                            logger.error(f"Unexpected error while processing transcript for video {video_id}: {e}", exc_info=True)
+                            
+                    except Exception as e:
+                        transcript_error = f"Critical error: {str(e)}"
+                        logger.critical(f"Critical error processing video {video_id}: {e}", exc_info=True)
+                    
+                    # Add error information to transcript preview if available
+                    if transcript_error and not transcript_preview.startswith("["):
+                        transcript_preview = f"[Error: {transcript_error}]"
                     
                     # Get the first few lines of the description as "snippets"
                     description = video_details.get('description', '')
                     snippets = [line.strip() for line in description.split('\n') if line.strip()][:5]
                     
-                    videos.append({
-                        'title': snippet.get('title', 'No Title'),
-                        'url': f"https://www.youtube.com/watch?v={video_id}",
-                        'channel': snippet.get('channelTitle', 'Unknown Channel'),
-                        'published_at': snippet.get('publishedAt', ''),
-                        'description': description[:200] + '...' if len(description) > 200 else description,
-                        'snippets': snippets if snippets else ["No description available"],
-                        'has_transcript': transcript is not None,
-                        'transcript_preview': transcript[:500] + '...' if transcript else None
-                    })
+                    video = YouTubeVideo(
+                        video_id=video_id,
+                        title=snippet.get('title', 'No Title'),
+                        url=f"https://www.youtube.com/watch?v={video_id}",
+                        channel=snippet.get('channelTitle', 'Unknown Channel'),
+                        published_at=snippet.get('publishedAt', ''),
+                        description=description,
+                        snippets=snippets if snippets else ["No description available"],
+                        has_transcript=has_transcript,
+                        transcript_preview=transcript_preview,
+                        full_transcript=transcript if ((include_full_transcript or format == 'raw') and transcript) else None
+                    )
+                    
+                    # Format the result based on the requested format
+                    if format == 'slim_json':
+                        videos.append(self.__format_slim_json(video, include_full_transcript))
+                    elif format == 'slim_xml':
+                        videos.append(self.__format_slim_xml(video, include_full_transcript))
+                    else:
+                        videos.append(video)
+                    
                 except Exception as e:
-                    print(f"Error processing video: {e}")
+                    logger.error(f"Error processing video {video_id}: {e}", exc_info=True)
                     continue
                     
-            return videos
-            
         except HttpError as e:
-            print(f"YouTube API error: {e}")
             if e.resp.status == 403:
-                print("This might be due to API quota exceeded. Please check your Google Cloud Console.")
-            return []
+                logger.error("API quota exceeded. Please check your Google Cloud Console.")
+            else:
+                logger.error(f"YouTube API error: {e}")
         except Exception as e:
-            print(f"Error searching for videos: {e}")
-            return []
+            logger.error(f"Error searching for videos: {e}", exc_info=True)
+            
+        return videos
+    
+    def __format_slim_json(self, video: YouTubeVideo, include_full_transcript: bool = False) -> Dict[str, Any]:
+        """Format a YouTubeVideo into a minimal JSON format."""
+        result = {
+            "title": video.title,
+            "channel": video.channel,
+            "url": video.url,
+            "published_at": video.published_at,
+            "description": video.description[:500] + ('...' if len(video.description) > 500 else ''),
+            "has_transcript": video.has_transcript,
+            "transcript_preview": video.transcript_preview
+        }
+        
+        if include_full_transcript and video.full_transcript:
+            result["full_transcript"] = video.full_transcript
+            
+        return result
+    
+    def __format_slim_xml(self, video: YouTubeVideo, include_full_transcript: bool = False) -> str:
+        """Format a YouTubeVideo into a slim XML format."""
+        def escape_xml(text):
+            if not text:
+                return ""
+            return (
+                str(text)
+                .replace('&', '&amp;')
+                .replace('<', '&lt;')
+                .replace('>', '&gt;')
+                .replace('"', '&quot;')
+                .replace("'", '&apos;')
+            )
+        
+        description = escape_xml(video.description[:500] + ('...' if len(video.description) > 500 else ''))
+        transcript_preview = escape_xml(video.transcript_preview or "")
+        
+        lines = [
+            f'<title>{escape_xml(video.title)}</title>',
+            f'<channel>{escape_xml(video.channel)}</channel>',
+            f'<url>{escape_xml(video.url)}</url>',
+            f'<published_at>{escape_xml(video.published_at)}</published_at>',
+            f'<has_transcript>{"true" if video.has_transcript else "false"}</has_transcript>',
+            f'<description>{description}</description>',
+            f'<transcript_preview>{transcript_preview}</transcript_preview>'
+        ]
+        
+        if include_full_transcript and video.full_transcript:
+            full_transcript = escape_xml(video.full_transcript)
+            lines.append(f'<full_transcript>{full_transcript}</full_transcript>')
+        
+        return '\n'.join(lines)
     
     def get_video_details(self, video_id: str) -> Dict[str, str]:
-        """Get additional video details including full description."""
+        """Get additional video details.
+        
+        Args:
+            video_id: YouTube video ID
+            
+        Returns:
+            Dictionary containing video details
+        """
         try:
             response = self.youtube.videos().list(
                 part="snippet",
@@ -149,7 +342,7 @@ class YouTubeSearcher:
             ).execute()
             
             if not response.get('items'):
-                return {"description": "No description available"}
+                return {"description": "No description available", "channel_title": "Unknown"}
                 
             snippet = response['items'][0].get('snippet', {})
             return {
@@ -158,9 +351,16 @@ class YouTubeSearcher:
             }
             
         except Exception as e:
-            return {"description": f"Error fetching details: {str(e)[:100]}", "channel_title": "Unknown"}
+            logger.error(f"Error getting video details for {video_id}: {e}")
+            return {
+                "description": f"Error fetching details: {str(e)[:100]}",
+                "channel_title": "Unknown"
+            }
 
 def main():
+    """Example usage of the YouTubeSearcher class."""
+    load_dotenv()
+    
     # Get YouTube API key from environment variables
     api_key = os.getenv('YOUTUBE_API_KEY')
     if not api_key:
@@ -168,12 +368,9 @@ def main():
         print("Please create a .env file with YOUTUBE_API_KEY=your_api_key")
         return
     
-    # Check for proxy in environment variables
-    http_proxy = os.getenv('HTTP_PROXY')
-    if http_proxy:
-        print(f"Using HTTP proxy: {http_proxy}")
-    
-    searcher = YouTubeSearcher(api_key)
+    # Initialize searcher with optional proxy
+    proxy = os.getenv('HTTP_PROXY')
+    searcher = YouTubeSearcher(api_key=api_key, proxy=proxy)
     
     try:
         while True:
@@ -182,7 +379,7 @@ def main():
                 break
                 
             print(f"\nSearching for videos about: {query}")
-            videos = searcher.search_videos(query)
+            videos = searcher.search_videos(query, max_results=3)
             
             if not videos:
                 print("No videos found. Please try a different search term.")
@@ -190,34 +387,34 @@ def main():
                 
             print(f"\nFound {len(videos)} videos:")
             for i, video in enumerate(videos, 1):
-                print(f"\n{i}. {video['title']}")
-                print(f"   Channel: {video['channel']}")
-                print(f"   Published: {video['published_at']}")
-                print(f"   URL: {video['url']}")
-                print(f"   Has Transcript: {'Yes' if video['has_transcript'] else 'No'}")
-                
-                # Print first 200 characters of the description
-                print(f"\n   Description: {video['description']}")
-                
-                # Print transcript preview if available
-                if video.get('transcript_preview'):
-                    print("\n   Transcript Preview:")
-                    print(f"   {video['transcript_preview']}")
-                
-                # Print first few snippets from the description
-                if 'snippets' in video and video['snippets']:
-                    print("\n   Snippets:")
-                    for j, snippet in enumerate(video['snippets'], 1):
-                        print(f"      {j}. {snippet}")
-                
-                print("\n" + "-"*80)
-                
+                if isinstance(video, YouTubeVideo):
+                    print(f"\n{i}. {video.title}")
+                    print(f"   Channel: {video.channel}")
+                    print(f"   Published: {video.published_at}")
+                    print(f"   URL: {video.url}")
+                    print(f"   Has Transcript: {'Yes' if video.has_transcript else 'No'}")
+                    print(f"   Description: {video.description}")
+                    
+                    if video.has_transcript and video.transcript_preview:
+                        print("\n   Transcript Preview:")
+                        print(f"   {video.transcript_preview}")
+                    if video.full_transcript:
+                        print("\n   Full Transcript:")
+                        print(f"   {video.full_transcript}")
+                elif isinstance(video, dict):
+                    print(f"\n{i}. {video['title']}")
+                    print(f"   Channel: {video['channel']}")
+                    print(f"   Published: {video['published_at']}")
+                    print(f"   URL: {video['url']}")
+                    print(f"   Has Transcript: {video['has_transcript']}")
+                    print(f"   Description: {video['description']}")
+                elif isinstance(video, str):
+                    print(f"\n{i}. {video}")
+    
     except KeyboardInterrupt:
-        print("\nOperation cancelled by user.")
+        print("\nExiting...")
     except Exception as e:
-        print(f"\nAn unexpected error occurred: {e}")
-    finally:
-        print("\nThank you for using YouTube Search!")
+        print(f"An error occurred: {e}")
 
 if __name__ == "__main__":
     main()
