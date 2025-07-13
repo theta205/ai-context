@@ -10,6 +10,7 @@ import xml.etree.ElementTree as ET
 import praw
 from googlesearch import search
 from dotenv import load_dotenv
+import time
 
 # Set up logging
 logging.basicConfig(
@@ -18,8 +19,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Load environment variables
-load_dotenv()
 
 @dataclass
 class RedditComment:
@@ -77,7 +76,42 @@ class RedditSearcher:
             )
         
         # Initialize PRAW client
-        self.reddit = praw.Reddit(
+        self.reddit = self._setup_reddit()
+        self.timings = {}
+        
+    @staticmethod
+    def _timeit(func):
+        """Decorator to time function execution."""
+        def wrapper(self, *args, **kwargs):
+            start_time = time.time()
+            result = func(self, *args, **kwargs)
+            elapsed = time.time() - start_time
+            
+            # Store timing info
+            func_name = func.__name__
+            if not hasattr(self, 'timings'):
+                self.timings = {}
+                
+            if func_name not in self.timings:
+                self.timings[func_name] = []
+                
+            self.timings[func_name].append(elapsed)
+            
+            logger.debug(f"{func_name} executed in {elapsed:.4f} seconds")
+            return result
+        return wrapper
+        
+    def print_timings(self):
+        """Print timing statistics for all tracked functions."""
+        print("\n=== Function Timings ===")
+        for func_name, times in self.timings.items():
+            if times:
+                print(f"{func_name}: {sum(times)/len(times):.4f}s avg ({len(times)} calls)")
+    
+    @_timeit
+    def _setup_reddit(self):
+        """Set up PRAW Reddit instance."""
+        return praw.Reddit(
             client_id=self.client_id,
             client_secret=self.client_secret,
             user_agent=self.user_agent
@@ -95,27 +129,30 @@ class RedditSearcher:
                 return match.group(1)
         return None
 
-    def __get_post_data(self, post_id: str) -> Optional[RedditPost]:
+    @_timeit
+    def __get_post_data(self, post_id: str, include_comments: bool = True, comment_limit: int = 5) -> Optional[RedditPost]:
         """Fetch and process data for a single Reddit post."""
         try:
             submission = self.reddit.submission(id=post_id)
             submission.comments.replace_more(limit=0)  # Load top-level comments only
             
-            # Get top 5 comments by score
-            comments = sorted(
-                [
-                    RedditComment(
-                        author=comment.author.name if comment.author else "[deleted]",
-                        score=comment.score,
-                        body=comment.body,
-                        created_utc=datetime.utcfromtimestamp(comment.created_utc).isoformat()
-                    )
-                    for comment in submission.comments
-                    if not comment.stickied
-                ],
-                key=lambda x: x.score,
-                reverse=True
-            )[:5]
+            # Get top comments by score
+            comments = []
+            if include_comments:
+                comments = sorted(
+                    [
+                        RedditComment(
+                            author=comment.author.name if comment.author else "[deleted]",
+                            score=comment.score,
+                            body=comment.body,
+                            created_utc=datetime.utcfromtimestamp(comment.created_utc).isoformat()
+                        )
+                        for comment in submission.comments
+                        if not comment.stickied
+                    ],
+                    key=lambda x: x.score,
+                    reverse=True
+                )[:comment_limit]
             
             return RedditPost(
                 title=submission.title,
@@ -146,43 +183,107 @@ class RedditSearcher:
             ]
         }
 
-    def __format_slim_xml(self, post: RedditPost) -> str:
-        """Format a RedditPost into a slim XML format optimized for LLM processing."""
-        # Unescape special characters in text content
-        from html import unescape
+    def __format_slim_xml(self, posts: Union[RedditPost, List[RedditPost]]) -> str:
+        """Format one or more RedditPost objects into a slim XML format optimized for LLM processing.
         
-        # Build XML content with clear section separation
+        Args:
+            posts: A single RedditPost or a list of RedditPost objects
+            
+        Returns:
+            str: XML string containing all posts
+        """
+        from html import unescape
+        from typing import List
+        
+        # Initialize the lines list
         lines = []
         
-        # Title section
-        lines.append('<title>' + unescape(post.title) + '</title>\n')
-        lines.append('<subreddit>' + post.subreddit + '</subreddit>\n')
-        lines.append('<url>' + post.url + '</url>\n')
+        # Ensure we're working with a list, even if a single post is provided
+        if not isinstance(posts, list):
+            posts = [posts]
         
-        # Selftext section (if exists)
-        if post.selftext:
-            lines.append('<selftext>')
-            lines.append(unescape(post.selftext))
-            lines.append('</selftext>\n')
+        # Start building the XML document
+        lines.append('<?xml version="1.0" encoding="UTF-8"?>')
+        lines.append('<reddit_posts>')
         
-        # Comments section (if exists)
-        if post.comments:
-            lines.append('<comments>\n')
-            for comment in post.comments:
-                # Clean and unescape comment body
-                body = unescape(comment.body)
-                # Replace HTML entities and normalize whitespace
-                body = ' '.join(body.split())
-                lines.append('<comment>' + body + '</comment>\n')
-            lines.append('</comments>')
+        for post in posts:
+            if not post:
+                continue
+                
+            try:
+                # Post wrapper
+                lines.append('<post>')
+                
+                # Post metadata
+                if hasattr(post, 'title') and post.title:
+                    lines.append(f'<title>{unescape(str(post.title))}</title>')
+                elif isinstance(post, dict) and 'title' in post:
+                    lines.append(f'<title>{unescape(str(post["title"]))}</title>')
+                    
+                if hasattr(post, 'subreddit') and post.subreddit:
+                    lines.append(f'<subreddit>{post.subreddit}</subreddit>')
+                elif isinstance(post, dict) and 'subreddit' in post:
+                    lines.append(f'<subreddit>{post["subreddit"]}</subreddit>')
+                    
+                if hasattr(post, 'url') and post.url:
+                    lines.append(f'<url>{post.url}</url>')
+                elif isinstance(post, dict) and 'url' in post:
+                    lines.append(f'<url>{post["url"]}</url>')
+                
+                # Selftext (if exists)
+                selftext = None
+                if hasattr(post, 'selftext') and post.selftext:
+                    selftext = post.selftext
+                elif isinstance(post, dict) and 'selftext' in post:
+                    selftext = post['selftext']
+                    
+                if selftext:
+                    lines.append('<selftext>')
+                    lines.append(f'{unescape(str(selftext))}')
+                    lines.append('</selftext>')
+                
+                # Comments (if exist)
+                comments = []
+                if hasattr(post, 'comments') and post.comments:
+                    comments = post.comments
+                elif isinstance(post, dict) and 'comments' in post:
+                    comments = post['comments']
+                    
+                if comments:
+                    lines.append('<comments>')
+                    for comment in comments:
+                        try:
+                            body = None
+                            if hasattr(comment, 'body') and comment.body:
+                                body = comment.body
+                            elif isinstance(comment, dict) and 'body' in comment:
+                                body = comment['body']
+                                
+                            if body:
+                                body = ' '.join(unescape(str(body)).split())
+                                lines.append(f'<comment>{body}</comment>')
+                        except Exception as e:
+                            logger.error(f"Error formatting comment: {e}")
+                            continue
+                    lines.append('</comments>')
+                
+                lines.append('</post>\n')
+                
+            except Exception as e:
+                logger.error(f"Error formatting post: {e}")
+                continue
         
-        return ''.join(lines)
+        lines.append('</reddit_posts>')
+        return '\n'.join(lines)
 
+    @_timeit
     def search(
         self,
         query: str,
         num_results: int = 5,
-        format: str = 'raw'
+        format: str = 'raw',
+        include_comments: bool = True,
+        comment_limit: int = 5
     ) -> Union[List[RedditPost], List[Union[dict, str]]]:
         """Search for Reddit posts using Google search.
         
@@ -191,10 +292,12 @@ class RedditSearcher:
             num_results: Maximum number of results to return (1-25, default: 5)
             format: Output format - 'raw' for full objects, 'slim_json' for minimal JSON,
                    'slim_xml' for minimal XML
-            
+            include_comments: Whether to include comments in the results (default: True)
+            comment_limit: Maximum number of comments to include per post (default: 5)
+        
         Returns:
             List of RedditPost objects or formatted strings, depending on format
-            
+        
         Raises:
             ValueError: If query is empty, num_results is invalid, or format is invalid
         """
@@ -221,7 +324,11 @@ class RedditSearcher:
                     
                     if post_id:
                         # Fetch post data
-                        post_data = self.__get_post_data(post_id)
+                        post_data = self.__get_post_data(
+                            post_id, 
+                            include_comments=include_comments, 
+                            comment_limit=comment_limit
+                        )
                         if post_data:
                             if format == 'slim_json':
                                 results.append(self.__format_slim_json(post_data))
