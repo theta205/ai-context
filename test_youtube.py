@@ -91,7 +91,7 @@ def test_search(query: str, max_results: int = 3):
                 include_full_transcript=True
             )
             elapsed = time.time() - start_time
-            
+            print(f"Search completed in {elapsed:.2f} seconds")
             # Save results to file
             save_results(
                 results,

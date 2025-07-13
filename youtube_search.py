@@ -28,7 +28,6 @@ class YouTubeVideo:
     channel: str
     published_at: str
     description: str
-    snippets: List[str]
     has_transcript: bool
     transcript_preview: Optional[str] = None
     full_transcript: Optional[str] = None
@@ -140,7 +139,7 @@ class YouTubeSearcher:
         if format not in ['raw', 'slim_json', 'slim_xml']:
             raise ValueError("format must be 'raw', 'slim_json', or 'slim_xml")
             
-        max_results = max(1, min(50, max_results))  # Clamp between 1 and 50
+        max_results = max(1, min(10, max_results))  # Clamp between 1 and 10
         videos = []
         
         try:
@@ -237,18 +236,13 @@ class YouTubeSearcher:
                     if transcript_error and not transcript_preview.startswith("["):
                         transcript_preview = f"[Error: {transcript_error}]"
                     
-                    # Get the first few lines of the description as "snippets"
-                    description = video_details.get('description', '')
-                    snippets = [line.strip() for line in description.split('\n') if line.strip()][:5]
-                    
                     video = YouTubeVideo(
                         video_id=video_id,
                         title=snippet.get('title', 'No Title'),
                         url=f"https://www.youtube.com/watch?v={video_id}",
                         channel=snippet.get('channelTitle', 'Unknown Channel'),
                         published_at=snippet.get('publishedAt', ''),
-                        description=description,
-                        snippets=snippets if snippets else ["No description available"],
+                        description=video_details.get('description', ''),
                         has_transcript=has_transcript,
                         transcript_preview=transcript_preview,
                         full_transcript=transcript if ((include_full_transcript or format == 'raw') and transcript) else None
@@ -294,35 +288,38 @@ class YouTubeSearcher:
         return result
     
     def __format_slim_xml(self, video: YouTubeVideo, include_full_transcript: bool = False) -> str:
-        """Format a YouTubeVideo into a slim XML format."""
+        """Format a YouTubeVideo into a slim XML format optimized for LLM processing."""
         def escape_xml(text):
             if not text:
                 return ""
             return (
                 str(text)
-                .replace('&', '&amp;')
-                .replace('<', '&lt;')
-                .replace('>', '&gt;')
-                .replace('"', '&quot;')
-                .replace("'", '&apos;')
             )
         
-        description = escape_xml(video.description[:500] + ('...' if len(video.description) > 500 else ''))
-        transcript_preview = escape_xml(video.transcript_preview or "")
+        # Unescape special characters in the content
+        from html import unescape
         
-        lines = [
-            f'<title>{escape_xml(video.title)}</title>',
-            f'<channel>{escape_xml(video.channel)}</channel>',
-            f'<url>{escape_xml(video.url)}</url>',
-            f'<published_at>{escape_xml(video.published_at)}</published_at>',
-            f'<has_transcript>{"true" if video.has_transcript else "false"}</has_transcript>',
-            f'<description>{description}</description>',
-            f'<transcript_preview>{transcript_preview}</transcript_preview>'
-        ]
+        # Build XML content with clear section separation and minimal nesting
+        lines = []
         
+        # Video metadata section
+        lines.append(f'<title>{escape_xml(video.title)}</title>')
+        lines.append(f'<channel>{escape_xml(video.channel)}</channel>')
+        lines.append(f'<url>{escape_xml(video.url)}</url>')
+        lines.append(f'<published>{escape_xml(video.published_at)}</published>')        
+        # Description section
+        description = unescape(video.description[:500] + ('...' if len(video.description) > 500 else ''))
+        lines.append(f'<description>\n{escape_xml(description)}\n</description>')
+        
+        # Transcript section
+        if video.transcript_preview:
+            transcript_preview = unescape(video.transcript_preview)
+            lines.append(f'<transcript_preview>\n{escape_xml(transcript_preview)}\n</transcript_preview>')
+        
+        # Full transcript if requested and available
         if include_full_transcript and video.full_transcript:
-            full_transcript = escape_xml(video.full_transcript)
-            lines.append(f'<full_transcript>{full_transcript}</full_transcript>')
+            full_transcript = unescape(video.full_transcript)
+            lines.append(f'<full_transcript>\n{escape_xml(full_transcript)}\n</full_transcript>')
         
         return '\n'.join(lines)
     
@@ -356,65 +353,3 @@ class YouTubeSearcher:
                 "description": f"Error fetching details: {str(e)[:100]}",
                 "channel_title": "Unknown"
             }
-
-def main():
-    """Example usage of the YouTubeSearcher class."""
-    load_dotenv()
-    
-    # Get YouTube API key from environment variables
-    api_key = os.getenv('YOUTUBE_API_KEY')
-    if not api_key:
-        print("Error: YOUTUBE_API_KEY not found in environment variables.")
-        print("Please create a .env file with YOUTUBE_API_KEY=your_api_key")
-        return
-    
-    # Initialize searcher with optional proxy
-    proxy = os.getenv('HTTP_PROXY')
-    searcher = YouTubeSearcher(api_key=api_key, proxy=proxy)
-    
-    try:
-        while True:
-            query = input("\nEnter your search query (or 'quit' to exit): ").strip()
-            if query.lower() == 'quit':
-                break
-                
-            print(f"\nSearching for videos about: {query}")
-            videos = searcher.search_videos(query, max_results=3)
-            
-            if not videos:
-                print("No videos found. Please try a different search term.")
-                continue
-                
-            print(f"\nFound {len(videos)} videos:")
-            for i, video in enumerate(videos, 1):
-                if isinstance(video, YouTubeVideo):
-                    print(f"\n{i}. {video.title}")
-                    print(f"   Channel: {video.channel}")
-                    print(f"   Published: {video.published_at}")
-                    print(f"   URL: {video.url}")
-                    print(f"   Has Transcript: {'Yes' if video.has_transcript else 'No'}")
-                    print(f"   Description: {video.description}")
-                    
-                    if video.has_transcript and video.transcript_preview:
-                        print("\n   Transcript Preview:")
-                        print(f"   {video.transcript_preview}")
-                    if video.full_transcript:
-                        print("\n   Full Transcript:")
-                        print(f"   {video.full_transcript}")
-                elif isinstance(video, dict):
-                    print(f"\n{i}. {video['title']}")
-                    print(f"   Channel: {video['channel']}")
-                    print(f"   Published: {video['published_at']}")
-                    print(f"   URL: {video['url']}")
-                    print(f"   Has Transcript: {video['has_transcript']}")
-                    print(f"   Description: {video['description']}")
-                elif isinstance(video, str):
-                    print(f"\n{i}. {video}")
-    
-    except KeyboardInterrupt:
-        print("\nExiting...")
-    except Exception as e:
-        print(f"An error occurred: {e}")
-
-if __name__ == "__main__":
-    main()

@@ -4,9 +4,9 @@
     <title>Python for Beginners - Learn Coding with Python in 1 Hour</title>
 <channel>Programming with Mosh</channel>
 <url>https://www.youtube.com/watch?v=kqtD5dpn9C8</url>
-<published_at>2020-09-16T13:00:20Z</published_at>
-<has_transcript>true</has_transcript>
-<description>Learn Python basics in just 1 hour! Perfect for beginners interested in AI and coding. ⚡ Plus, get 6 months of PyCharm FREE with the coupon in the description!
+<published>2020-09-16T13:00:20Z</published>
+<description>
+Learn Python basics in just 1 hour! Perfect for beginners interested in AI and coding. ⚡ Plus, get 6 months of PyCharm FREE with the coupon in the description!
 
 ❤️ Join this channel to get access to perks:
 https://www.youtube.com/channel/UCWv7vMbMWH4-V0ZXdmDpPBA/join
@@ -16,39 +16,43 @@ https://www.youtube.com/channel/UCWv7vMbMWH4-V0ZXdmDpPBA/join
 - Subscribe for more Python tutorials like this: https://goo.gl/6PYaGF
 
 📕 Get the FREE goodies:
-- Python cheat shee...</description>
-<transcript_preview>in this python tutorial you&apos;re going to
+- Python cheat shee...
+</description>
+<transcript_preview>
+in this python tutorial you're going to
 learn everything you need to know to
 start programming in python if you want
 to learn python programming for data
 science machine learning or web
 development this python tutorial is the
-perfect place to learn python you don&apos;t
+perfect place to learn python you don't
 need any prior knowledge in python or
-programming in general i&apos;m going to
-teach you everything from scratch i&apos;m
-mosh hamadani and i&apos;ve taught millions
+programming in general i'm going to
+teach you everything from scratch i'm
+mosh hamadani and i've taught millions
 of people how to code through this
-channel if you&apos;re new here make sure to
-subscrib...</transcript_preview>
-<full_transcript>in this python tutorial you&apos;re going to
+channel if you're new here make sure to
+subscrib...
+</transcript_preview>
+<full_transcript>
+in this python tutorial you're going to
 learn everything you need to know to
 start programming in python if you want
 to learn python programming for data
 science machine learning or web
 development this python tutorial is the
-perfect place to learn python you don&apos;t
+perfect place to learn python you don't
 need any prior knowledge in python or
-programming in general i&apos;m going to
-teach you everything from scratch i&apos;m
-mosh hamadani and i&apos;ve taught millions
+programming in general i'm going to
+teach you everything from scratch i'm
+mosh hamadani and i've taught millions
 of people how to code through this
-channel if you&apos;re new here make sure to
+channel if you're new here make sure to
 subscribe as i upload new videos every
-week now let&apos;s jump in and get started
+week now let's jump in and get started
 all right before we get started let me
 give you some ideas about what you can
-do with python that&apos;s a very common
+do with python that's a very common
 question python is a multi-purpose
 programming language so you can use it
 for a variety of different tasks you can
@@ -76,11 +80,11 @@ you go to downloads and select the
 latest version of python
 here in your downloads folder you should
 see this package simply double click it
-you&apos;re going to see this python
-installer if you&apos;re on windows you will
+you're going to see this python
+installer if you're on windows you will
 see this checkbox over here add python
-to path make sure to check it it&apos;s
-really important otherwise you&apos;re not
+to path make sure to check it it's
+really important otherwise you're not
 going to be able to follow this tutorial
 simply click on continue
 again
@@ -90,7 +94,7 @@ and install the latest version of python
 now here you need to enter the username
 password of your computer
 so
-let&apos;s do that real quick
+let's do that real quick
 next you need to install a code editor
 we use a code editor to write our code
 and execute it the most popular code
@@ -103,59 +107,59 @@ you should see two different editions
 one is the professional edition which is
 commercial and we also have this
 community edition which is free and open
-source so we&apos;re going to download the
+source so we're going to download the
 community edition
 now in your downloads folder you should
-have this package let&apos;s double click it
-if you&apos;re on windows you&apos;re going to see
+have this package let's double click it
+if you're on windows you're going to see
 an installation wizard so simply click
 on the next button until you install
-pycharm if you&apos;re on a mac you need to
+pycharm if you're on a mac you need to
 drag this pycharm and drop it onto the
 applications folder
 now
-let&apos;s open it
+let's open it
 the first time you open pycharm you have
-to configure a few settings we don&apos;t
+to configure a few settings we don't
 want to spend time on this so over here
-we&apos;re going to click on skip remaining
+we're going to click on skip remaining
 and set defaults
-now let&apos;s create a new project
+now let's create a new project
 over here we can specify the location
 and the name of our python project so
-let&apos;s append hello world to this path
+let's append hello world to this path
 this is where our python project is
-going to be saved so let&apos;s click on
+going to be saved so let's click on
 create
 in this window you can see the content
-of our project so here&apos;s our hello world
+of our project so here's our hello world
 project currently we have only one
 folder inside this project that is vn
 which is short for virtual environment
-we&apos;ll talk about virtual environments in
-the future so currently we don&apos;t have
+we'll talk about virtual environments in
+the future so currently we don't have
 any python files inside this project a
 real application can consist of tens or
 hundreds or even thousands of python
-files so let&apos;s right click on the
+files so let's right click on the
 project name
-and go to new python file we&apos;re going to
+and go to new python file we're going to
 call this file up
 now we can collapse this project window
 by clicking on this icon so now we have
-more space let&apos;s write our first python
-code we&apos;re going to write print all in
+more space let's write our first python
+code we're going to write print all in
 lowercase then add parentheses
 then add quotes either single quotes or
 double quotes
-and inside this code we&apos;re going to
+and inside this code we're going to
 write hello world
 so this is what we call a string a
 string means a string or sequence of
 characters in simple words that means
 textual data so in python and in many
 other programming languages whenever
-we&apos;re dealing with textual data we
+we're dealing with textual data we
 should always surround our text with
 quotes
 in python we can use single or double
@@ -170,51 +174,51 @@ then select run
 note that there is a shortcut associated
 with this command i always use shortcuts
 because they increase my productivity so
-let&apos;s click on this
+let's click on this
 now select app
 and over here
 you can see this little window this is
 what we call the terminal window and it
 shows the output of our program
-so here&apos;s the hello world message
+so here's the hello world message
 printed in the terminal window now as
 you learn more python you will learn how
 to build applications that have a
-graphical user interface that&apos;s an
-advanced topic so for now let&apos;s not
+graphical user interface that's an
+advanced topic so for now let's not
 worry about it
-alright now let&apos;s talk about variables
+alright now let's talk about variables
 we use variables to temporarily store
-data in a computer&apos;s memory for example
+data in a computer's memory for example
 we can store the price of a product or
-someone&apos;s name their email their age and
+someone's name their email their age and
 so on let me show you so
 to declare a variable we start by typing
-a name for that variable let&apos;s say age
+a name for that variable let's say age
 then we add an equal sign
-and then we type a value let&apos;s say 20.
-so with this we&apos;re storing the number 20
-somewhere in our computer&apos;s memory and
-we&apos;re attaching this age as a label for
+and then we type a value let's say 20.
+so with this we're storing the number 20
+somewhere in our computer's memory and
+we're attaching this age as a label for
 that memory location so now we can read
 the value at this memory location and
 print it on the terminal so instead of
 printing hello world we want to print
 the value of the age variable
-so i&apos;m going to delete what we have
+so i'm going to delete what we have
 inside parenthesis
-and type age note that i&apos;m not adding
+and type age note that i'm not adding
 quotes because if i run this program
-we&apos;ll see the text h on the terminal we
-don&apos;t want that we want the value of the
-age variable so let&apos;s remove the quote
+we'll see the text h on the terminal we
+don't want that we want the value of the
+age variable so let's remove the quote
 and
 print the value of the age variable
 now here on the toolbar you can click on
 this play icon to run your program or
 you can use the shortcut that i showed
 you in the last video so the shortcut is
-over here on a mac that&apos;s ctrl shift and
+over here on a mac that's ctrl shift and
 r
 so
 there you go
@@ -227,36 +231,36 @@ now when we run our program
 we see 30. so as you can see our program
 gets executed from top to bottom
 so this is how we can declare and use a
-variable now let&apos;s look at a few more
+variable now let's look at a few more
 examples
-so i&apos;m going to declare
+so i'm going to declare
 another variable called price
 and set it to 19.95
 so in python we can use numbers with a
 decimal point or
 whole numbers we can also declare a
 variable and assign it a string value so
-let&apos;s say first underline name so if you
+let's say first underline name so if you
 want to use multiple words in the name
 of a variable we should separate them
 using an underscore this makes our code
 more readable see what would happen if i
-didn&apos;t use this underline
+didn't use this underline
 this is not easily readable so we always
 separate multiple words by an underscore
 now we set this to a string so we can
 use single quotes or
-double quotes let&apos;s say march
+double quotes let's say march
 we also have a special type of value
 called a boolean value which can be true
 or false that is like yes or no in
-english let me show you so i&apos;m going to
+english let me show you so i'm going to
 declare another variable called is
 online and set it to true
 we could also set it to false what we
 have here is called a boolean value
 now note that python is a case sensitive
-language so it&apos;s sensitive to lowercase
+language so it's sensitive to lowercase
 and uppercase letters in this case if i
 use a lowercase f
 we can see an error over here because
@@ -266,16 +270,16 @@ keyword in python that represents the
 boolean false value
 so this is how we can declare and use
 variables in python
-all right now here&apos;s a little exercise
+all right now here's a little exercise
 for you
 imagine we want to write a program for a
-hospital so we&apos;re going to check in a
-patient named john smith he&apos;s 20 years
+hospital so we're going to check in a
+patient named john smith he's 20 years
 old and is a new patient i want you to
 declare a few variables to store these
 values use the comment box below to
 share your code with others
-in this tutorial i&apos;m going to show you
+in this tutorial i'm going to show you
 how to receive input from the user so in
 python we have another built-in function
 called input we use this to read a value
@@ -285,19 +289,19 @@ then we type in a string here we can
 type a message like what is your name we
 had a question mark followed by a space
 you will see why we need this space in a
-second so let&apos;s run this program
+second so let's run this program
 we get this message now we have to enter
 a value so we click over here
 now you can see that the carrot is
 separated from the question mark this is
 because of the white space that we added
 over here
-so now we have to type a value let&apos;s say
+so now we have to type a value let's say
 john when we press enter
 this function will return the value that
 we entered in the terminal window so we
 can get that value and store it in a
-variable so let&apos;s declare a variable
+variable so let's declare a variable
 called name and set it to the return
 value of the input function
 now we can print a greeting message for
@@ -309,30 +313,30 @@ value of the name variable so we use a
 plus sign
 and then type name
 what we are doing here is called string
-concatenation so we&apos;re combining this
+concatenation so we're combining this
 string with another string
-now let&apos;s run our program and see what
+now let's run our program and see what
 happens so what is your name
 mosh
 now
 we get this message hello mosh
 so this is how we can use the input
 function in python
-you&apos;ll learn about the three types of
+you'll learn about the three types of
 data in python we have numbers
 strings and booleans now there are times
 you want to convert the value of a
 variable from one type to another let me
-show you so we&apos;re going to use our input
+show you so we're going to use our input
 function
-to read the user&apos;s birth year so enter
+to read the user's birth year so enter
 your birth here
 now this input function is going to
 return a value so we can store it in a
 variable called
 birth underline year
 okay
-now let&apos;s write code to calculate the
+now let's write code to calculate the
 age of this user so we write an
 expression like this currently we are in
 the year 2020 so 2020 minus
@@ -340,10 +344,10 @@ birth year
 this expression or piece of code is
 going to produce a value so once again
 we can store that value in a variable
-let&apos;s call that variable age
-now let&apos;s print age
+let's call that variable age
+now let's print age
 on the terminal
-let&apos;s run our program and see what
+let's run our program and see what
 happens
 so
 my birth year is 1982.
@@ -371,14 +375,14 @@ number in other words when i entered
 1982 this input function returned a
 string with these characters 1982 so
 this string is different from the number
-1982 they&apos;re completely different types
+1982 they're completely different types
 so in this case
 let me delete these lines
 the reason we got this error is that we
 try to subtract a string from an integer
 so our code looks like this
 1982
-now python doesn&apos;t know how to subtract
+now python doesn't know how to subtract
 a string from an integer
 so to solve this problem we need to
 convert this string to an integer
@@ -393,7 +397,7 @@ so to solve this problem
 we need to replace
 the string
 with the end function
-so let&apos;s see what&apos;s going on here on the
+so let's see what's going on here on the
 first line we call the input function
 this returns a string
 on the second line we pass the string to
@@ -403,10 +407,10 @@ burst year
 then
 we subtract it from 2020 we get the age
 and store it in the age variable now
-let&apos;s run our program
+let's run our program
 so
 1982
-and there you go i&apos;m 38 years old
+and there you go i'm 38 years old
 so this is how the in function works now
 we also have another built-in function
 called float that is for converting a
@@ -422,7 +426,7 @@ and finally we have stir for converting
 a value to a string so these are the
 built-in functions for converting the
 type of our variables
-now here&apos;s a little exercise for you i
+now here's a little exercise for you i
 want you to write a basic calculator
 program so here we have to enter two
 numbers we can type a whole number or a
@@ -431,40 +435,40 @@ and then our program will print the sum
 of these two numbers
 so pause the video spend two minutes on
 this exercise and then see my solution
-all right first we&apos;re going to call our
+all right first we're going to call our
 input function to read the first number
 we get the result and store it in a
 variable called first
-now let&apos;s declare
+now let's declare
 another variable called second and read
 the second number
 now
 we calculate the sum
 so that is first plus second
-now let&apos;s see what happens when we print
+now let's see what happens when we print
 sum on the terminal
 so i enter 10 and 20
 but instead of 30 we get 10 20. this is
-because we&apos;re combining or concatenating
+because we're combining or concatenating
 two strings so
 as i told you before the input function
 returns a string so
 this line will be equivalent to first
-equals 10. we&apos;re dealing with a string
+equals 10. we're dealing with a string
 not an integer
 similarly
 second is going to be
 20 as a string so when we combine two
 strings 10 plus 20 will get
-10 20 because we&apos;re dealing with textual
+10 20 because we're dealing with textual
 data okay so to solve this problem
 we need to convert the values we read to
 their numeric representation so over
 here
-we&apos;re going to pass
+we're going to pass
 first to our int function
 and here as well
-now let&apos;s run our program
+now let's run our program
 so we enter 10 and 20 we get 30. what if
 we enter a floating point number so 10.1
 and 20.
@@ -472,35 +476,35 @@ we got an error
 so to solve this problem
 we need to treat both these values as
 floats so instead of the in function
-we&apos;re going to use the float function
-now let&apos;s run our program one more time
+we're going to use the float function
+now let's run our program one more time
 we enter a whole number and a floating
 point number so the result is correct
-now let&apos;s add a label over here so sum
+now let's add a label over here so sum
 is
 plus sum
-let&apos;s run our program
+let's run our program
 one more time 10 and 20.
 once again we got an error the error is
 saying that python can only concatenate
 strings not floats to strings
-so on line four we have a string we&apos;re
+so on line four we have a string we're
 concatenating this with a float because
 the result of this expression is a
-floating point number we&apos;re adding two
+floating point number we're adding two
 floats so the result is a float as well
-so python doesn&apos;t know how to evaluate
+so python doesn't know how to evaluate
 code like this
-it doesn&apos;t know how to concatenate a
+it doesn't know how to concatenate a
 float
 to a string to solve this problem
 we need to convert sum to your string so
 this is where
 we use the stir function
-now let&apos;s run the program again so
-10 plus 20.1 and here&apos;s the result
+now let's run the program again so
+10 plus 20.1 and here's the result
 and one last thing
-in this example i&apos;m calling the float
+in this example i'm calling the float
 function at the time we want to
 calculate the sum of these two numbers
 but this is not a requirement we can
@@ -509,7 +513,7 @@ over here so this input function returns
 a string we can pass that string to our
 float function take a look so float
 parenthesis like this
-so the value that we&apos;re passing to the
+so the value that we're passing to the
 float function is the value that is
 returned from the input function
 similarly
@@ -522,9 +526,9 @@ so type conversion is important in
 python and other programming languages
 there are times you need to convert the
 type of variable to a different type
-in this tutorial i&apos;m going to show you a
+in this tutorial i'm going to show you a
 bunch of cool things you can do with
-strings in python so let&apos;s start by
+strings in python so let's start by
 declaring a variable called course
 and set it to python for
 beginners
@@ -547,14 +551,14 @@ object these are basically functions
 that you can call just like the print or
 input functions the difference is that
 the print and input functions are
-general purpose functions they don&apos;t
+general purpose functions they don't
 belong to a particular object but the
 functions you see over here are specific
 to strings now more accurately we refer
 to these as methods so when a function
 is part of an object we refer to that
 function as a method
-so let&apos;s look at a few examples here we
+so let's look at a few examples here we
 have a function or a method called upper
 and we use that to convert a string to
 uppercase so if we print
@@ -582,22 +586,22 @@ first occurrence of y in our string so
 in python the index of the first
 character in a string is 0. so here we
 have 0 1 2 3 4 and so on so when we run
-this program you&apos;re going to see one on
+this program you're going to see one on
 the terminal because the index of y is
-1. take a look first i&apos;m going to delete
-this line we don&apos;t need it anymore also
-let&apos;s do this line let&apos;s run the program
+1. take a look first i'm going to delete
+this line we don't need it anymore also
+let's do this line let's run the program
 there you go
 now as i told you before python is
 sensitive to lowercase and uppercase
 letters so if i pass an uppercase y here
 this find method returns negative 1
-because we don&apos;t have an uppercase y in
+because we don't have an uppercase y in
 this string we can also pass a sequence
 of characters for example 4. so this
 will return the index of the word 4.
 take a look
-so it&apos;s 7.
+so it's 7.
 now there are times we want to replace
 something in a string with something
 else
@@ -610,27 +614,27 @@ look
 so python for beginners
 obviously
 if you look for a character or a
-sequence of characters that don&apos;t exist
+sequence of characters that don't exist
 in our string nothing is going to happen
 for example if we try to replace x with
-4 obviously we don&apos;t have x here so
+4 obviously we don't have x here so
 nothing is going to happen
 also just like the upper method the
 replace method is not going to modify
-our original string so it&apos;s going to
+our original string so it's going to
 return a new string this is because
 strings in python and many other
 programming languages are immutable we
 cannot change them once we create them
 whenever we want to change your string
-we&apos;ll end up with a new string object in
+we'll end up with a new string object in
 memory
 now one last thing i want to cover in
 this tutorial there are times you want
 to see if your string contains a
 character or a sequence of characters
 one way to do that is using the find
-method that we talked about so let&apos;s see
+method that we talked about so let's see
 if our string
 contains python
 now when we run this program
@@ -645,24 +649,24 @@ keyword in python this is what we call
 the in operator
 so after that we type the name of our
 variable
-so with this expression we&apos;re checking
+so with this expression we're checking
 to see if we have python in course as
 you can see python code is very readable
-it&apos;s like plain english so when we run
+it's like plain english so when we run
 this program
 instead of seeing the index of the first
 occurrence of python we see a boolean
 value this is more desirable in a lot of
 cases
-next we&apos;re going to look at arithmetic
+next we're going to look at arithmetic
 operations
-in this tutorial i&apos;m going to show you
+in this tutorial i'm going to show you
 the arithmetic operators that we have in
 python these are the same arithmetic
 operators that we have in math for
 example we can add numbers we can
 subtract them multiply them and so on so
-let&apos;s print
+let's print
 10 plus 3. let me run this program we
 have 13.
 so this is the addition operator we also
@@ -671,7 +675,7 @@ we have multiplication
 and division now technically we have two
 different types of division operators we
 have a division with one slash and
-another with two slashes let&apos;s look at
+another with two slashes let's look at
 the differences if you use a single
 slash
 we get a floating point number that is a
@@ -690,14 +694,14 @@ of three so when we run this we get a
 thousand
 now for all these operators that you saw
 we have an augmented assignment operator
-let me explain what it means so let&apos;s
+let me explain what it means so let's
 say we have a variable called x
 and we set it to 10.
 now we want to increment the value of x
 by 3. so we have to write code like this
 x
 equals x plus 3. when python executes
-this code it&apos;s going to evaluate this
+this code it's going to evaluate this
 expression or this piece of code the
 result of this expression is 10 plus 3
 which is 13. then it will store 13 in
@@ -716,14 +720,14 @@ subtraction to decrease the value of x
 by 3 we can use multiplication and so on
 so these are the arithmetic operators in
 python
-all right let me ask you a question i&apos;m
+all right let me ask you a question i'm
 going to declare a variable called x and
 set it to 10 plus 3 times 2. what do you
 think is the result of this expression
 this is a basic math question that
 unfortunately a lot of people fail to
 answer
-the answer is 16. here&apos;s the reason in
+the answer is 16. here's the reason in
 math we have this concept called
 operator precedence and that determines
 the order in which these operators are
@@ -741,8 +745,8 @@ to be evaluated first we can wrap it in
 parenthesis
 so
 like this now when we execute this code
-we&apos;re going to see 26 because 10 plus 3
-is 13 and that divided by 2 is 26. let&apos;s
+we're going to see 26 because 10 plus 3
+is 13 and that divided by 2 is 26. let's
 verify this so print x
 and we get 26.
 so you learn about the arithmetic
@@ -750,7 +754,7 @@ operators in python now in python we
 have another set of operators called
 comparison operators we use these
 operators to compare values let me show
-you so i&apos;m going to declare a variable
+you so i'm going to declare a variable
 called x
 and set it to an expression like this 3
 is greater than 2. so what we have here
@@ -768,17 +772,17 @@ equal to
 here is the equality operator which is
 indicated by two equal signs do not
 confuse this with the assignment
-operator so here we&apos;re comparing three
+operator so here we're comparing three
 and two for equality so if we run our
 program
 we see false because 3
 does not equal to 2.
-so here&apos;s the equality operator we also
+so here's the equality operator we also
 have
 the not equality operator that is
 indicated by an exclamation mark
 followed by an equal sign
-so let&apos;s quickly recap
+so let's quickly recap
 here are the comparison operators we
 have in python greater than greater than
 or equal to less than less than or equal
@@ -787,18 +791,18 @@ equal and not equal
 these operators are extremely important
 in real python programs because quite
 often we have to compare values to
-evaluate certain conditions you&apos;re going
+evaluate certain conditions you're going
 to see that soon
 in python we have another set of
 operators called logical operators we
 use these operators to build complex
 rules and conditions let me show you so
-i&apos;m going to declare a variable called
+i'm going to declare a variable called
 price and set it to 25.
-now let&apos;s print
+now let's print
 a boolean expression like this
 price is greater than 10.
-now let&apos;s say we want to check to see if
+now let's say we want to check to see if
 the price is between 10 and 30. this is
 where we use the logical and operator so
 we type and and right after that we type
@@ -816,11 +820,11 @@ with the or operator if at least one of
 these boolean expressions returns true
 then the result of this entire
 expression will be true
-to demonstrate this i&apos;m going to change
-price to 5. let&apos;s see how python is
-going to execute this code so first it&apos;s
+to demonstrate this i'm going to change
+price to 5. let's see how python is
+going to execute this code so first it's
 going to look at this boolean expression
-is price greater than 10 no it&apos;s not so
+is price greater than 10 no it's not so
 it will keep going
 then it will look at the second boolean
 expression is price less than 30 it sure
@@ -830,13 +834,13 @@ there you go
 we also have the not operator which
 basically inverses any values that you
 give it let me show you so
-we&apos;re going to have one boolean
+we're going to have one boolean
 expression price greater than 10. the
 result of this expression is false
 now if you apply the not operator
 this will inverse false to true so when
 we run the program we get true
-so let&apos;s quickly recap in python we have
+so let's quickly recap in python we have
 three logical operators we have logical
 and which returns true if both
 expressions return true
@@ -844,7 +848,7 @@ we have logical or which returns true if
 at least one expression returns true and
 we have not which inverses any value
 that we give it
-in this tutorial we&apos;re going to talk
+in this tutorial we're going to talk
 about if statements in python we use if
 statements to make decisions in our
 programs for example we can declare a
@@ -852,11 +856,11 @@ variable called temperature and
 depending on the value of this variable
 we can print different messages on the
 terminal let me show you
-so here&apos;s our temperature variable
+so here's our temperature variable
 we set it to 35.
-now let&apos;s say if temperature is greater
+now let's say if temperature is greater
 than 30 we want to print a message
-saying it&apos;s a hot day so we type if
+saying it's a hot day so we type if
 then we type a condition and this is
 where we use our comparison operators so
 we type temperature
@@ -866,26 +870,26 @@ happens when i press enter now
 the character is indented and this
 represents a block of code so the code
 that we write over here will be executed
-if this condition is true otherwise it&apos;s
+if this condition is true otherwise it's
 not going to be executed let me show you
 so
-we&apos;re going to print
-it&apos;s a hot day
-and by the way note that here i&apos;ve
+we're going to print
+it's a hot day
+and by the way note that here i've
 surrounded the string with double quotes
 because here we have a single quote as
-an apostrophe so i couldn&apos;t declare a
+an apostrophe so i couldn't declare a
 string like this with single quotes if i
-typed it&apos;s a hot day
+typed it's a hot day
 look python gets confused because it
 thinks this single code represents the
-end of our string so it doesn&apos;t
+end of our string so it doesn't
 recognize the subsequent characters okay
-so that&apos;s why we use
+so that's why we use
 double quotes here
 so we can have an apostrophe in our
 string
-so it&apos;s a hot day
+so it's a hot day
 now if i press enter again
 the carrot is indented so the code that
 right here will be part of our if block
@@ -905,7 +909,7 @@ braces so
 you start a block of code using a left
 brace
 and then end it using a right brace in
-python we don&apos;t have curly braces so we
+python we don't have curly braces so we
 use indentation to represent a block of
 code okay
 so
@@ -913,28 +917,28 @@ in this case
 these two lines are indented and that
 means they are part of this block of
 code
-now let&apos;s run the program and see what
+now let's run the program and see what
 happens
 so we see these two messages because the
 temperature is greater than 30.
 now
 if i change the temperature to 25
-and run the program again we don&apos;t see
+and run the program again we don't see
 anything okay
 now
-after this block let&apos;s print
+after this block let's print
 done
 because this code is not indented it
-will always get executed it&apos;s not part
+will always get executed it's not part
 of our if block okay so take a look
-here&apos;s the down message
+here's the down message
 now
-let&apos;s add a second condition so if
+let's add a second condition so if
 temperature is not greater than 30 that
-means it&apos;s less than or equal to 30. so
-i&apos;m gonna add a second condition so if
+means it's less than or equal to 30. so
+i'm gonna add a second condition so if
 the temperature is between 20 and 30 i
-want to print it&apos;s a nice day
+want to print it's a nice day
 so here we type l if
 that is short for else if
 and here we type a second condition
@@ -942,65 +946,65 @@ so temperature greater than 20.
 we add a colon press enter now we have a
 new block
 so here we can print
-it&apos;s a nice day
+it's a nice day
 so if this condition is true that means
 the temperature
 is greater than 20 and less than or
 equal to 30. now what we have here is
-called a comment that is why it&apos;s grayed
-out it&apos;s not real code it&apos;s just some
+called a comment that is why it's grayed
+out it's not real code it's just some
 note that we add to our program python
 is not going to execute this so whenever
 we type a pound sign what we have after
 is treated as a comment okay
 so
-if this condition is true then we&apos;re
+if this condition is true then we're
 going to see this message on the
-terminal let&apos;s run our program and
+terminal let's run our program and
 verify this
 there you go the temperature is 25
-that&apos;s why we see this message
+that's why we see this message
 now we can have as many conditions as we
 want there are no limitations okay
-so let&apos;s add another condition
+so let's add another condition
 l if
 temperature is greater than 10
 then
-we&apos;re going to print
-it&apos;s a bit cold
+we're going to print
+it's a bit cold
 now in this case if this condition is
 true that means the temperature is
 greater than 10
 and less than or equal to 20.
 now finally if the temperature is less
-than 10 let&apos;s print a message saying
-it&apos;s a cold day
+than 10 let's print a message saying
+it's a cold day
 so
 here we type else then we add a colon
 and now we have a new block
 so this code will get executed if none
 of the above conditions are true
 so here we can print
-it&apos;s called
+it's called
 so this is how we use if statements to
 make decisions in our programs
-here&apos;s a great exercise for you to
+here's a great exercise for you to
 practice what you have learned so far i
 want you to write a weight converter
 program like this
 so this program is asking me my weight i
 enter 170.
-next it&apos;s asking me if the weight is in
+next it's asking me if the weight is in
 kilograms or pounds so i can type k for
 kilograms or l for pounds i can type a
-lowercase l or an uppercase l it doesn&apos;t
-matter so let&apos;s go with a lowercase l
+lowercase l or an uppercase l it doesn't
+matter so let's go with a lowercase l
 now it tells me weight in kilogram is
 76.5
 so go ahead and spend 5 minutes on this
 exercise you can use the comment box
 below to share your code with others and
-then when you&apos;re done come back see my
+then when you're done come back see my
 solution
 so first we call our input function to
 ask the first question
@@ -1012,7 +1016,7 @@ is this in kilogram
 or
 pounds we get the result and store it in
 a variable called unit
-this is where we&apos;re going to use an if
+this is where we're going to use an if
 statement
 so
 we want to check to see if unit
@@ -1057,13 +1061,13 @@ and here we concatenate
 this string with converter all right now
 we need to terminate this block so we
 press enter then shift and tab good
-now if we run this program we&apos;re going
-to see an error let me show you so let&apos;s
+now if we run this program we're going
+to see an error let me show you so let's
 run it
-here i&apos;m going to enter 170
+here i'm going to enter 170
 then i type a lowercase l
-okay here&apos;s an error
-can&apos;t multiply sequence by non-end of
+okay here's an error
+can't multiply sequence by non-end of
 type float so this is where we got this
 error when we try to multiply the weight
 by 0.45
@@ -1076,11 +1080,11 @@ function always returns a string so here
 we need to convert the weight
 to a number we can either use the end or
 the float function
-let&apos;s run the program one more time
+let's run the program one more time
 so
 170
 in pounds
-here&apos;s the second error can only
+here's the second error can only
 concatenate string not float to string
 and that error occurred
 over here
@@ -1093,19 +1097,19 @@ the result of this operation is going to
 be a float
 now on line eight we are trying to
 concatenate or combine a string with a
-float and python doesn&apos;t know how to
+float and python doesn't know how to
 execute this code
 to solve this problem we need to convert
 this flow to a string so here we use the
 built-in stir function
-let&apos;s run the program and see what
+let's run the program and see what
 happens
 so
-170 in pounds and here&apos;s my weight in
-kilograms now let&apos;s try entering a
+170 in pounds and here's my weight in
+kilograms now let's try entering a
 weight in kilograms so run it one more
 time
-let&apos;s say 76
+let's say 76
 kilos
 here we get a familiar error can only
 concatenate string to string not float
@@ -1113,7 +1117,7 @@ so this error occurred on line five
 where we try to concatenate a string
 to a float so once again we need to
 convert this to a string object now
-let&apos;s run the program one more time
+let's run the program one more time
 76
 kilos
 is equal to 168 pounds
@@ -1130,29 +1134,29 @@ want to learn more you may want to look
 at my python course it comes with a 30
 day money back guarantee and a
 certificate of completion you can add to
-your resume in case you&apos;re interested
+your resume in case you're interested
 the link is below this video
-in this tutorial we&apos;re going to talk
+in this tutorial we're going to talk
 about while loops in python we use while
 loops to repeat a block of code multiple
-times for example let&apos;s say we want to
+times for example let's say we want to
 print the numbers one to five a poor way
 of doing this is writing code like this
 print one then print two print 3
 print 4 and print 5.
 now why is this a bad approach well what
 if we wanted to print the numbers 1 to 1
-million we don&apos;t want to write 1 million
+million we don't want to write 1 million
 lines of code each line printing a
 number this is where we use while loops
 so
-we&apos;ll start off by declaring a variable
+we'll start off by declaring a variable
 like i and set it to our initial number
-let&apos;s say one
+let's say one
 then we type while and here we type a
 condition so once again we can use our
 comparison operators
-let&apos;s say i less than 5 less than or
+let's say i less than 5 less than or
 equal to 5.
 as long as this condition is true then
 the code that we write inside of the
@@ -1161,7 +1165,7 @@ type a colon then press enter now we
 have a block of code
 in this block we can print i
 and then we need to increment i y one so
-we set i to i plus one if you don&apos;t do
+we set i to i plus one if you don't do
 this i will always be one and this block
 of code
 will get executed indefinitely it will
@@ -1178,42 +1182,42 @@ python evaluates this condition
 2 is less than or equal to 5 so the
 condition is true and once again python
 is going to execute this block one more
-time in the second iteration we&apos;re going
+time in the second iteration we're going
 to see two on the terminal and then i
 will become three so this will continue
 until this condition is no longer true
 let me show you so
-let&apos;s run this program
+let's run this program
 now we see the numbers one to five so
 this is the beauty of while loops
 i can easily change five
 to one
-thousand and by the way i&apos;m separating
+thousand and by the way i'm separating
 these three digits using an underscore
 this makes my number more readable we
-don&apos;t have to add this but it just makes
+don't have to add this but it just makes
 our code more readable
-so let&apos;s run the program
-now we see the numbers 1 to 1000. it&apos;s
+so let's run the program
+now we see the numbers 1 to 1000. it's
 much easier than 1000 lines of code each
 printing a number okay now let me show
 you something really cool
-so i&apos;m going to change this
+so i'm going to change this
 to 10.
 now instead of printing i i want to
-print an expression so i&apos;m going to
+print an expression so i'm going to
 multiply i
 by a string an asterisk
 now you might be confused here because
 earlier i told you that in python we
 cannot concatenate a number to a string
-but here i&apos;m using the multiplication
+but here i'm using the multiplication
 operator well this is different we can
 multiply a number by a string and this
 will repeat that string based on the
 value of that number so if i is one
-we&apos;re gonna see one asterisk if i is
-five we&apos;re going to see five asterisks
+we're gonna see one asterisk if i is
+five we're going to see five asterisks
 let me show you so when we run this
 program
 we see this triangle shape because in
@@ -1232,12 +1236,12 @@ or basic types in python now in python
 we have a bunch of complex types as well
 these complex types are very useful in
 building real applications
-in this tutorial we&apos;re going to talk
+in this tutorial we're going to talk
 about lists we use lists whenever we
 want to represent a list of objects like
 a list of numbers or a list of names let
 me show you
-so i&apos;m going to declare a variable
+so i'm going to declare a variable
 called names
 and set it to a list of names
 so here we add square brackets to
@@ -1250,7 +1254,7 @@ sam
 and mary so we separate this element
 these items using a comma okay
 now
-let&apos;s print our list so print names
+let's print our list so print names
 take a look
 it comes out exactly like how we wrote
 it
@@ -1261,7 +1265,7 @@ we type a pair of square brackets and
 inside the square brackets we type an
 index the index of the first element in
 this list is zero so now when we run
-this program we&apos;re going to see john on
+this program we're going to see john on
 the terminal
 there you go
 now
@@ -1272,27 +1276,27 @@ programming languages
 so if 0 represents the first element in
 this list what do you think
 negative 1 represents it represents the
-last element in this list let&apos;s verify
-it so let&apos;s run the program and here&apos;s
+last element in this list let's verify
+it so let's run the program and here's
 mary
 what about
 negative 2 well that represents the
 second element
 from the end of the list
-so let&apos;s run the program and here&apos;s some
+so let's run the program and here's some
 then we can also change an object at a
-given index for example let&apos;s say here
+given index for example let's say here
 we made a mistake and this john should
 not be spelled with an h
 so we need to reset it we type names of
 zero
 now we treat this like a regular
 variable so we set it to a new value
-we set it to john without an h now let&apos;s
+we set it to john without an h now let's
 print our list
-and here&apos;s our updated list beautiful
+and here's our updated list beautiful
 we can also select a range of values for
-example let&apos;s say we&apos;re only interested
+example let's say we're only interested
 in the first three names
 so over here we type square brackets
 and here we need to type two indexes a
@@ -1300,11 +1304,11 @@ start index and an end index
 our start index is a zero because we
 want to start from here
 and our end index is going to be zero
-one two plus one that&apos;s going to be
+one two plus one that's going to be
 three so we add a colon three so python
 is going to return all the elements from
 the start index up to the end index but
-excluding the end index so it&apos;s going to
+excluding the end index so it's going to
 return the elements at index 0 1 and 2.
 take a look
 here are the first three names
@@ -1313,7 +1317,7 @@ this expression does not modify our
 original list it returns a new list so
 right after this print statement if we
 print our original list
-you can see that it&apos;s not changed
+you can see that it's not changed
 so this is how we use lists in python
 earlier i told you that strengths in
 python are objects objects in
@@ -1328,28 +1332,28 @@ string object in python
 now lists are also objects so they have
 a bunch of methods for adding items or
 removing them and so on let me show you
-so i&apos;m going to declare
+so i'm going to declare
 a list of numbers
-let&apos;s say 1 2 3 4 and 5.
+let's say 1 2 3 4 and 5.
 now to add a new element at the end of
 this list we can use the append method
 so we type numbers
 that append
 and here we type 6.
-now let&apos;s print our list
-so here&apos;s our updated list beautiful
+now let's print our list
+so here's our updated list beautiful
 now what if you want to insert a number
 somewhere in the middle or at the
 beginning
 for that we use the insert method
-so we&apos;re going to call the insert method
+so we're going to call the insert method
 now on the top
 go to the view menu
 and
 look at parameter info look at the
-shortcut on a mac computer it&apos;s command
+shortcut on a mac computer it's command
 and p
-on windows it&apos;s probably control and p
+on windows it's probably control and p
 if we use this shortcut we can see the
 values that this method expects
 so the first value that this method
@@ -1358,7 +1362,7 @@ of this value is an integer
 so if i want to insert a value at the
 beginning of this list i should pass 0
 as the index of the first element right
-so let&apos;s pass 0.
+so let's pass 0.
 now
 the second value is highlighted so the
 second value is an object and the type
@@ -1367,57 +1371,57 @@ can be any type we can pass a number we
 can pass a boolean we can pass a string
 we can pass a list or any type of
 objects in python
-so i&apos;m going to pass negative 1. now
-let&apos;s run our program
+so i'm going to pass negative 1. now
+let's run our program
 you can see negative 1 appeared at the
 beginning of our list
 we also have a method for removing items
-so let&apos;s call
+so let's call
 remove
 three
-let&apos;s run the program
+let's run the program
 three is gone we only have one two four
 and five
 now if you wanna remove all the items in
 the list we call the clear method so
 clear
-this method doesn&apos;t expect any values
-so let&apos;s run our program our list is
+this method doesn't expect any values
+so let's run our program our list is
 empty
 now sometimes you want to know if a
 given item exists in our list or not to
 do that we use the in operator so
-let&apos;s remove this line
-instead of printing our numbers list i&apos;m
+let's remove this line
+instead of printing our numbers list i'm
 going to print an expression
 one
 in
 numbers
-so here we&apos;re using the in operator
-we&apos;re checking to see if one is in the
+so here we're using the in operator
+we're checking to see if one is in the
 numbers list so this is a boolean
 expression it returns a boolean value
 take a look
 so we get true
 obviously if we search for a value that
-doesn&apos;t exist in this list
+doesn't exist in this list
 like 10
 we get false okay
 now finally there are times you want to
 know how many items you have in the list
 to do that you can use the built-in lend
 function
-so let&apos;s print
+so let's print
 len of numbers so len
 is a built-in function just like the
-print function that is why it&apos;s
+print function that is why it's
 highlighted as purple it returns the
 number of elements in a list take a look
 so we have five elements in this list
 when writing python programs there are
 times you want to iterate over a list
 and access each item individually let me
-show you so i&apos;m going to declare
+show you so i'm going to declare
 a list of numbers
 one two three four five
 now if we print this list
@@ -1425,12 +1429,12 @@ it comes out exactly like how we wrote
 it using the square bracket notation but
 what if we wanted to print each item on
 a separate line that is where we use the
-for loop let me show you so we&apos;re not
+for loop let me show you so we're not
 going to print the entire list
-instead we&apos;re going to type 4
+instead we're going to type 4
 now we declare a variable which is
 called a loop variable
-let&apos;s call it item
+let's call it item
 then we type in
 numbers
 next we add a colon to start a block of
@@ -1451,7 +1455,7 @@ a while loop but our code would be a
 little bit longer let me show you so
 we would have to start by declaring a
 loop variable outside of our while loop
-let&apos;s say i we set it to zero
+let's say i we set it to zero
 now we say while i is less than
 here we need to find out how many items
 we have in this list
@@ -1466,7 +1470,7 @@ index so
 numbers of
 i now we need to increment i by one so i
 equals i plus one
-let&apos;s run the program and see what we
+let's run the program and see what we
 get
 so we get the numbers one to five these
 are coming out from our for loop and
@@ -1476,15 +1480,15 @@ while loop now if you compare these two
 approaches you can definitely see that
 the implementation using the for loop is
 shorter and easier to understand we
-don&apos;t have to use the square bracket
-notation we don&apos;t have to call the len
-function we don&apos;t have to declare a
+don't have to use the square bracket
+notation we don't have to call the len
+function we don't have to declare a
 variable a loop variable and then
 increment it explicitly
 so with the for loop in each iteration
 the item variable will automatically
 hold one value in this list
-in this tutorial we&apos;re going to talk
+in this tutorial we're going to talk
 about the range function in python we
 use the range function to generate a
 sequence of numbers let me show you so
@@ -1496,13 +1500,13 @@ return a range object
 a range object is an object that can
 store a sequence of numbers let me show
 you so
-let&apos;s call that numbers
+let's call that numbers
 so this is a range object
-in this object we&apos;re going to have the
+in this object we're going to have the
 numbers 0 to 5 but excluding 5.
 now if we print
 numbers
-we&apos;re going to see this message range of
+we're going to see this message range of
 zero to five not the actual numbers
 because this is the default
 representation of a range object to see
@@ -1515,10 +1519,10 @@ using a for loop basically we can use
 the for loop with any object that
 represents a sequence of objects
 so instead of printing numbers
-we&apos;re going to use a for loop
+we're going to use a for loop
 for number
 in numbers colon
-we&apos;re going to print
+we're going to print
 number
 take a look
 now we see the numbers zero to four
@@ -1531,13 +1535,13 @@ now if we supply two values
 the first value is going to be
 considered the starting value
 and the second value is going to be
-considered the ending value and it&apos;s
+considered the ending value and it's
 going to be excluded so range of 5 to 10
 is going to generate the numbers 5 to 9.
 take a look
 there you go
 now we can also supply a third value and
-that will be used as a step so let&apos;s say
+that will be used as a step so let's say
 instead of having a sequence of numbers
 like five six seven eight nine we wanna
 jump two numbers at a time so 5 7 9 and
@@ -1547,7 +1551,7 @@ so we get these odd numbers 5 7 and 9.
 so this is the range function in python
 like quite often you see the range
 function used as part of a for loop
-because we don&apos;t really need to store
+because we don't really need to store
 the result in a separate variable we can
 call the range function right here where
 we are using the numbers variable so we
@@ -1555,38 +1559,38 @@ can type range of five and this will
 return a range object holding the
 numbers zero to four take a look
 there you go
-so we don&apos;t really need to store the
+so we don't really need to store the
 result in a separate variable like
 numbers
 there you go
-in this tutorial we&apos;re going to talk
+in this tutorial we're going to talk
 about tuples in python tuples are kind
 of like lists we use them to store a
 sequence of objects but tuples are
 immutable which means we cannot change
 them once we create them let me show you
-so i&apos;m going to start by defining a list
+so i'm going to start by defining a list
 of numbers 1 2 3.
 now we use square brackets to define a
 list
 and parenthesis to define a tuple so now
 this numbers variable is storing a tuple
 if we try
-to reassign let&apos;s say the first element
-we&apos;re going to get an error
+to reassign let's say the first element
+we're going to get an error
 topple object does not support item
 assignment so this is what i meant by
-tuples are immutable they&apos;re
+tuples are immutable they're
 unchangeable
 also
 if you type numbers dot
-you don&apos;t see any methods like append
+you don't see any methods like append
 insert remove and so on we only have
 count and index
 count returns the number of occurrences
 of an element for example
 if we have
-let&apos;s say
+let's say
 two threes in this tuple
 and call count of three this will return
 2.
@@ -1595,10 +1599,10 @@ and this returns the index of the first
 occurrence of the given element
 now
 these other methods you see here that
-start with an underscore they&apos;re called
-magic methods it&apos;s an advanced topic and
-i&apos;ve covered it in detail in my complete
-python programming course if you&apos;re
+start with an underscore they're called
+magic methods it's an advanced topic and
+i've covered it in detail in my complete
+python programming course if you're
 interested the link is down below this
 video
 so tuples are immutable we cannot change
@@ -1609,7 +1613,7 @@ are times that once you create a list of
 objects you want to make sure that
 somewhere in your program you or someone
 else is not going to accidentally modify
-that list if that&apos;s the case then you
+that list if that's the case then you
 should use a tuple
 hey guys i just wanted to let you know
 that i have an online coding school at
@@ -1624,47 +1628,52 @@ want to learn more you may want to look
 at my python course it comes with a 30
 day money back guarantee and a
 certificate of completion you can add to
-your resume in case you&apos;re interested
+your resume in case you're interested
 the link is below this video
-hey</full_transcript>
+hey
+</full_transcript>
   </video>
   <video>
     <title>Top 10 AI Tools to Supercharge Your Python Programming</title>
 <channel>geekyai</channel>
 <url>https://www.youtube.com/watch?v=O7XFUhmRTvI</url>
-<published_at>2024-10-11T16:00:31Z</published_at>
-<has_transcript>true</has_transcript>
-<description>In this video, we&apos;re diving into the top 10 best AI tools that can help beginner Python programmers. These tools will make coding easier, help you write clean code, and even solve programming problems in real-time. Whether you&apos;re just starting out or looking to boost your skills, these AI tools will turn you into a coding pro faster than you think. Let’s explore them together!
+<published>2024-10-11T16:00:31Z</published>
+<description>
+In this video, we're diving into the top 10 best AI tools that can help beginner Python programmers. These tools will make coding easier, help you write clean code, and even solve programming problems in real-time. Whether you're just starting out or looking to boost your skills, these AI tools will turn you into a coding pro faster than you think. Let’s explore them together!
 
 *❤️Subscribe For  More:👉* https://www.youtube.com/channel/UCvmFLEdTaMlzghkCW1hESIA?sub_confirmation=1
 
-#AI #PythonProgr...</description>
-<transcript_preview>ever wanted to improve your coding
+#AI #PythonProgr...
+</description>
+<transcript_preview>
+ever wanted to improve your coding
 abilities without going through a
 headache imagine having a personal
 assistant able to help you debug smarter
 code faster and even make learning
-enjoyable we&apos;re exploring the top 10 AI
-Tools in today&apos;s video that are not only
+enjoyable we're exploring the top 10 AI
+Tools in today's video that are not only
 smart but also beginners friends these
 tools will help you to level up or start
 out and make Python Programming seem
 like a breeze all set to equip coding as
-your new superpower let&apos;s start now
+your new superpower let's start now
 number one GitHub
-co-pilot imagine having a p...</transcript_preview>
-<full_transcript>ever wanted to improve your coding
+co-pilot imagine having a p...
+</transcript_preview>
+<full_transcript>
+ever wanted to improve your coding
 abilities without going through a
 headache imagine having a personal
 assistant able to help you debug smarter
 code faster and even make learning
-enjoyable we&apos;re exploring the top 10 AI
-Tools in today&apos;s video that are not only
+enjoyable we're exploring the top 10 AI
+Tools in today's video that are not only
 smart but also beginners friends these
 tools will help you to level up or start
 out and make Python Programming seem
 like a breeze all set to equip coding as
-your new superpower let&apos;s start now
+your new superpower let's start now
 number one GitHub
 co-pilot imagine having a programmer
 friend who is constantly willing to
@@ -1676,7 +1685,7 @@ by offering intelligent
 recommendations using GitHub co-pilot
 will teach you less effort intensive
 cleaner more efficient code writing
-techniques it&apos;s like having a mentor
+techniques it's like having a mentor
 leading you over each stage and Prov
 iding real time help that accelerates
 your learning curve what if you find
@@ -1691,14 +1700,14 @@ introduce repetz Ghost Rider this
 artificial intelligence tool generates
 whole functions and even entire programs
 depend depending on your input therefore
-guiding your coding efforts it&apos;s like
+guiding your coding efforts it's like
 having a supercharged autocomplete
 function with style and code context
 awareness ghost rer will let you rapidly
 develop code snippits and learn new
 coding strategies only by interacting
 with this artificial intelligence tool
-it&apos;s a great approach to increase output
+it's a great approach to increase output
 and acquire understanding of best
 practices imagine now that you must view
 your code in real time and observe how
@@ -1707,7 +1716,7 @@ program that converts your code into
 Interactive visuals therefore enabling
 you to grasp Its Behavior and identify
 and detect problems before they become
-crises let&apos;s keep moving number three
+crises let's keep moving number three
 tab N tab 9 is your go-to tool if you
 want one that elevates code completion
 this AI powered autocomplete tool
@@ -1727,15 +1736,15 @@ to code better we will then look at a
 tool that offers comments and advice to
 assist you raising your coding
 competency similarly to a personal code
-coach don&apos;t miss this number four code
+coach don't miss this number four code
 GPT want to write code and get answers
 to your programming problems right away
 code gvt is a great program that uses
 GPT technology to help with coding
 chores and offer explanations for
-different programming ideas it&apos;s like
+different programming ideas it's like
 having a professional coder right at
-your fingertips you&apos;ll learn how to
+your fingertips you'll learn how to
 quickly make code Snippets and get full
 answers for tricky coding questions with
 code GPT it helps a lot with learning
@@ -1743,7 +1752,7 @@ and fixing problems which makes code
 problems a lot less scary want to know
 about tools that will not only help you
 code but also make sure it is perfect
-next we&apos;ll talk about a tool that helps
+next we'll talk about a tool that helps
 you keep up with high quality code
 standards and does automatic code
 reviews watch out number five sorcery
@@ -1762,7 +1771,7 @@ to come up with best practices and clean
 up your code what if you want a tool
 that shows you your code mistakes right
 away and lets you learn from them now
-we&apos;ll talk about a tool that gives you
+we'll talk about a tool that gives you
 immediate feedback and chances to learn
 for every mistake you make in code do
 not go anywhere number six pilent pilent
@@ -1772,7 +1781,7 @@ code for mistakes make sure you follow
 the rules for writing code and gives
 ideas on how to make your code better if
 you want to write clean usable python
-code you have to use this you&apos;ll see how
+code you have to use this you'll see how
 pilent helps you find bugs follow best
 practices and and make your code easier
 to read it detailed reports and ideas
@@ -1782,7 +1791,7 @@ better but what if you need a tool that
 does more than just look over your code
 what if you need one that also helps you
 write tests to make sure it works
-perfectly next we&apos;ll show you a tool
+perfectly next we'll show you a tool
 that will make sure your code always
 works perfectly like having an automatic
 testing suite number seven kite kite is
@@ -1798,11 +1807,11 @@ will help you improve your coding
 efficiency with quick access to
 pertinent documentation kite can
 recommend the next logical lines of code
-for instance if you&apos;re working on a
+for instance if you're working on a
 difficult function therefore saving you
 time spent looking for syntax or method
 names it even offers demand
-documentation so you won&apos;t have to leave
+documentation so you won't have to leave
 your Editor to hunt for facts however if
 you see a tool that not only helps with
 code completion but also fits very well
@@ -1850,13 +1859,13 @@ underlying many contemporary coding
 tools from creating code based on basic
 descriptions to tackling difficult
 coding challenges codex May assist with
-a variety of projects using codex&apos;s
+a variety of projects using codex's
 sophisticated features will teach you
 how to create whole functions or even
 applications with only a few words for
 instance you can specify a particular
 capability you desire and codex will
-generate code fit for your needs it&apos;s
+generate code fit for your needs it's
 like having a really intelligent
 co-coder that can concurrently help with
 coding and brainstorming curious about a
@@ -1865,7 +1874,7 @@ into a dynamic and interactive EXP
 experience in addition to facilitating
 code generation we will then explore a
 tool that increases the enjoyment and
-ease of learning coding don&apos;t skip this
+ease of learning coding don't skip this
 number 10 Jupiter notebooks for python
 programmers and data scientists Jupiter
 notebooks are a must-have adding
@@ -1891,47 +1900,32 @@ remain up toate on the most recent
 developments in Python Programming got
 any thoughts answer questions regarding
 these tools please leave a comment below
-I&apos;m eager to hear from you and assist
+I'm eager to hear from you and assist
 you with any coding problems you may be
 experiencing continue coding with
-confidence</full_transcript>
+confidence
+</full_transcript>
   </video>
   <video>
     <title>Python Basics: Your FIRST Program in Under a Minute! 🚀</title>
 <channel>The Programmers Realm</channel>
 <url>https://www.youtube.com/watch?v=nluUYtejoIE</url>
-<published_at>2024-06-21T07:55:33Z</published_at>
-<has_transcript>true</has_transcript>
-<description>In this quick tutorial, I’ll show you how to write your very first line of Python code: the classic &quot;Hello, World!&quot; 🌍✨
+<published>2024-06-21T07:55:33Z</published>
+<description>
+In this quick tutorial, I’ll show you how to write your very first line of Python code: the classic "Hello, World!" 🌍✨
 
-Whether you&apos;re a total beginner or brushing up on your basics, this video will get you started in under a minute. 🚀
+Whether you're a total beginner or brushing up on your basics, this video will get you started in under a minute. 🚀
 
 
 
-Don&apos;t forget to like, subscribe, and leave a comment on what you want to learn next! 🔥
+Don't forget to like, subscribe, and leave a comment on what you want to learn next! 🔥
 
-Join me in the PROGRAMMER&apos;S REALM!
+Join me in the PROGRAMMER'S REALM!
 
-#Python #Programming #HelloWorld #PythonTutorial #LearnToCode #CodingForBeginners #TheProgrammersRealm</description>
-<transcript_preview>Let&apos;s start with the classic 
-&apos;Hello, World!&apos; program in Python. 
-This one line of code uses the print 
-function to display text on the screen. 
-Now, let&apos;s run the code.
-And there it is! Python  
-prints &apos;Hello, World!&apos; to the console.
-print is a built-in function, and &apos;Hello, World!&apos;  
-is a string, which is just text inside quotes.
-Like and subscribe for more Python tips! 🚀</transcript_preview>
-<full_transcript>Let&apos;s start with the classic 
-&apos;Hello, World!&apos; program in Python. 
-This one line of code uses the print 
-function to display text on the screen. 
-Now, let&apos;s run the code.
-And there it is! Python  
-prints &apos;Hello, World!&apos; to the console.
-print is a built-in function, and &apos;Hello, World!&apos;  
-is a string, which is just text inside quotes.
-Like and subscribe for more Python tips! 🚀</full_transcript>
+#Python #Programming #HelloWorld #PythonTutorial #LearnToCode #CodingForBeginners #TheProgrammersRealm
+</description>
+<transcript_preview>
+[No transcript available]
+</transcript_preview>
   </video>
 </youtube_results>
