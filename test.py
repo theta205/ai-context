@@ -14,7 +14,7 @@ def main():
     )
     
     # Example search
-    query = "best 1440p monitors"
+    query = "best 1080p monitors"
     print(f"Searching for: {query}")
     
     try:

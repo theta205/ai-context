@@ -133,12 +133,16 @@ class RedditSearcher:
     def __get_post_data(self, post_id: str, include_comments: bool = True, comment_limit: int = 5) -> Optional[RedditPost]:
         """Fetch and process data for a single Reddit post."""
         try:
+            time_start = time.time()
             submission = self.reddit.submission(id=post_id)
             submission.comments.replace_more(limit=0)  # Load top-level comments only
+            time_end = time.time()
+            print(f"time elapsed for PRAW: {time_end - time_start} in seconds")
             
             # Get top comments by score
             comments = []
             if include_comments:
+                time_start = time.time()
                 comments = sorted(
                     [
                         RedditComment(
@@ -153,6 +157,8 @@ class RedditSearcher:
                     key=lambda x: x.score,
                     reverse=True
                 )[:comment_limit]
+                time_end = time.time()
+                print(f"time elapsed: {time_end - time_start} in seconds")
             
             return RedditPost(
                 title=submission.title,
@@ -192,18 +198,15 @@ class RedditSearcher:
         Returns:
             str: XML string containing all posts
         """
-        from html import unescape
-        from typing import List
-        
+        from html import unescape        
         # Initialize the lines list
         lines = []
-        
+        #posts = {"posts": posts}
         # Ensure we're working with a list, even if a single post is provided
         if not isinstance(posts, list):
             posts = [posts]
         
         # Start building the XML document
-        lines.append('<?xml version="1.0" encoding="UTF-8"?>')
         lines.append('<reddit_posts>')
         
         for post in posts:
@@ -267,7 +270,7 @@ class RedditSearcher:
                             continue
                     lines.append('</comments>')
                 
-                lines.append('</post>\n')
+                lines.append('</post>')
                 
             except Exception as e:
                 logger.error(f"Error formatting post: {e}")
@@ -315,7 +318,11 @@ class RedditSearcher:
         
         try:
             # Search for Reddit posts using Google
+            time_start = time.time()
+            posts = []
             for url in search(term=search_query, num_results=num_results * 2):
+                time_end = time.time()
+                print(f"time elapsed for Google search: {time_end - time_start} in seconds")
                 try:
                     # Clean the URL and extract post ID
                     parsed = urlparse(url)
@@ -330,19 +337,25 @@ class RedditSearcher:
                             comment_limit=comment_limit
                         )
                         if post_data:
-                            if format == 'slim_json':
-                                results.append(self.__format_slim_json(post_data))
-                            elif format == 'slim_xml':
-                                results.append(self.__format_slim_xml(post_data))
-                            else:
-                                results.append(post_data)
-                            if len(results) >= num_results:
+                            if format in ['raw', 'slim_json']:
+                                if format == 'slim_json':
+                                    results.append(self.__format_slim_json(post_data))
+                                else:
+                                    results.append(post_data)
+                            else:  # slim_xml - collect posts first
+                                posts.append(post_data)
+                            
+                            if len(posts) + len(results) >= num_results:
                                 break
                                 
                 except Exception as e:
                     logger.warning(f"Error processing URL {url}: {e}")
                     continue
                     
+            # If using slim_xml format, format all posts at once
+            if format == 'slim_xml' and posts:
+                results.append(self.__format_slim_xml(posts[:num_results]))
+                
         except Exception as e:
             logger.error(f"Error performing search: {e}")
             
